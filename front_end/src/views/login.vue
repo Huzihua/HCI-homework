@@ -155,7 +155,7 @@
               placeholder="密码"
               v-decorator="[
                 'registerPassword', 
-                {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePassword }], validateTrigger: 'blur'}]">
+                {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePassword }]}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input-password>
           </a-form-item>
@@ -311,13 +311,18 @@ export default {
         case 2:
           return 2;
         case 3:
+          return 3;
         case 4:
-          return sValue.length < 4 ? 3 : 4;
+          return 4;
       }
       return modes;
     },
 
     handlePhoneNumber(rule, value, callback) {
+      //为了值是空的时候和“请输入手机号”两个提示同时出现
+      if(value.length==0){
+        callback()
+      }
       const regex=/^1[0-9]{10}$/
       if(regex.test(value)){
         if (value.length !== 11) {
@@ -375,7 +380,6 @@ export default {
       } else {
         document.getElementById("three").style.background = "#eee";
       }
-
       callback()
     },
     handlePasswordCheck (rule, value, callback) {
@@ -440,6 +444,9 @@ export default {
           }
           await this.register(data).then(() => {
             this.customActiveKey = 'tab2'
+            document.getElementById("one").style.background = "#eee";
+            document.getElementById("two").style.background = "#eee";
+            document.getElementById("three").style.background = "#eee";
             this.form.setFieldsValue({
               'registerUserMail': '',
               'registerPassword': '',

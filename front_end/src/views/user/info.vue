@@ -4,7 +4,7 @@
             <a-tab-pane tab="我的信息" key="1">
                 <a-form :form="form" style="margin-top: 30px">
 
-                    <a-form-item label="用户名" :label-col="{ span: 3 }" :wrapper-col="{ span: 8, offset: 1  }">
+                    <a-form-item label="用户名" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1  }">
                         <a-input
                                 placeholder="请填写用户名"
                                 v-decorator="['userName', { rules: [{ required: true, message: '请输入用户名' }] }]"
@@ -12,10 +12,10 @@
                         />
                         <span v-else>{{ userInfo.userName }}</span>
                     </a-form-item>
-                    <a-form-item label="邮箱" :label-col="{ span: 3 }" :wrapper-col="{ span: 8, offset: 1 }">
+                    <a-form-item label="邮箱" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">
                         <a-input
                                 placeholder="请填写邮箱号"
-                                v-decorator="['email', { rules: [{ required: true, message: '请输入邮箱号' }] }]"
+                                v-decorator="['email', { rules: [{ required: true, message: '请输入邮箱号' },,{ validator: this.handleEmail }] }]"
                                 v-if="modify"
                         />
                         <span v-else>{{ userInfo.email}}</span>
@@ -23,44 +23,58 @@
                     </a-form-item>
 
                     <!--身份证号码-->
-                    <a-form-item label="身份证号码" :label-col="{ span: 3 }" :wrapper-col="{ span: 8, offset: 1 }">
-                        <span>{{ userInfo.idNumber}}</span>
-                    </a-form-item>
+<!--                    <a-form-item label="身份证号码" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">-->
+<!--                        <span>{{ userInfo.idNumber}}</span>-->
+<!--                    </a-form-item>-->
 
-                    <!--性别-->
-                    <a-form-item label="性别" :label-col="{ span: 3 }" :wrapper-col="{ span: 8, offset: 1 }">
-                        <span>{{ userInfo.sexType}}</span>
-                    </a-form-item>
+<!--                    &lt;!&ndash;性别&ndash;&gt;-->
+<!--                    <a-form-item label="性别" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">-->
+<!--                        <span>{{ userInfo.sexType}}</span>-->
+<!--                    </a-form-item>-->
                     <!--出生日期-->
-                    <a-form-item label="出生日期" :label-col="{ span: 3 }" :wrapper-col="{ span: 8, offset: 1 }">
-                        <span>{{ userInfo.birth_date }}</span>
+                    <a-form-item label="出生日期" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">
+
+                                  <a-date-picker
+                                          style="width: 100%"
+                                          size="middle"
+                                          v-if="modify"
+                                          v-decorator="[
+                                    'birth_date']">
+                                    <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                                  </a-date-picker>
+
+                        <span v-else>
+                          {{ userInfo.birth_date }}
+                        </span>
                     </a-form-item>
 
 
 
 
-                    <a-form-item label="手机号" :label-col="{ span: 3 }" :wrapper-col="{ span: 8, offset: 1 }">
+                    <a-form-item label="手机号" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">
                         <a-input
                                 placeholder="请填写手机号"
-                                v-decorator="['phoneNumber', { rules: [{ required: true, message: '请输入手机号' }] }]"
+                                v-decorator="['phoneNumber', { rules: [{ required: true, message: '请输入手机号' },{ validator: this.handlePhoneNumber }] }]"
                                 v-if="modify"
                         />
                         <span v-else>{{ userInfo.phoneNumber}}</span>
 
                     </a-form-item>
-                    <a-form-item label="会员等级" :label-col="{ span: 3 }" :wrapper-col="{ span: 8, offset: 1 }">
+                    <a-form-item label="会员等级" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">
                         <span>{{ userInfo.vip_level }}</span>
                     </a-form-item>
-                    <a-form-item label="信用值" :label-col="{ span: 3 }" :wrapper-col="{ span: 8, offset: 1 }">
+                    <a-form-item label="信用值" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">
                         <span>{{ userInfo.credit }}</span>
                     </a-form-item>
-                    <a-form-item label="密码" :label-col="{ span: 3 }" :wrapper-col="{ span: 8, offset: 1 }"
-                                 v-if="modify">
-                        <a-input
-                                placeholder="请输入新密码"
-                                v-decorator="['password', { rules: [{ required: true, message: '请输入新密码' }] }]"
-                        />
-                    </a-form-item>
+
+<!--                    <a-form-item label="密码" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }"-->
+<!--                                 v-if="modify">-->
+
+<!--                        <a-input-->
+<!--                                placeholder="请输入新密码"-->
+<!--                                v-decorator="['password', { rules: [{ required: false, message: '请输入新密码' }] }]"-->
+<!--                        />-->
+<!--                    </a-form-item>-->
                     <a-form-item :wrapper-col="{ span: 12, offset: 5 }" v-if="modify">
                         <a-button type="primary" @click="saveModify">
                             保存
@@ -71,7 +85,7 @@
                     </a-form-item>
                     <a-form-item :wrapper-col="{ span: 8, offset: 4 }" v-else>
                         <a-button type="primary" @click="modifyInfo">
-                            修改信息
+                            编辑
                         </a-button>
                     </a-form-item>
                 </a-form>
@@ -298,11 +312,20 @@
             saveModify() {
                 this.form.validateFields((err, values) => {
                     if (!err) {
+                        var birthDate=this.form.getFieldValue('birth_date');
+                      if(birthDate==null){
+                          birthDate=this.userInfo.birth_date;
+                        }else {
+                        birthDate=this.form.getFieldValue('birth_date').format('YYYY-MM-DD');
+                      }
+                      console.log(birthDate)
                         const data = {
                             userName: this.form.getFieldValue('userName'),
+                            birth_date:birthDate,
                             phoneNumber: this.form.getFieldValue('phoneNumber'),
-                            password: this.$md5(this.form.getFieldValue('password')).toString().substring(0,10),
+                            // password: this.$md5(this.form.getFieldValue('password')).toString().substring(0,10),
                             email: this.form.getFieldValue('email')
+
                         }
                         this.updateUserInfo(data).then(() => {
                             this.modify = false
@@ -364,7 +387,57 @@
                 this.setShowDetailTrue()
                 console.log(this.orderDetailInfo)
             },
+          handlePassword(rule, value, callback) {
+            if (value.length < 6 || value.length >18) {
+              callback(new Error('密码长度应是6-18位'))
+            }
+            this.msgText = this.checkStrong(value);
+            if (this.msgText > 1 || this.msgText == 1) {
+              document.getElementById("one").style.background = "red";
+            } else {
+              document.getElementById("one").style.background = "#eee";
+            }
+            if (this.msgText > 2 || this.msgText == 2) {
+              document.getElementById("two").style.background = "orange";
+            } else {
+              document.getElementById("two").style.background = "#eee";
+            }
+            if (this.msgText == 4) {
+              document.getElementById("three").style.background = "#00D1B2";
+            } else {
+              document.getElementById("three").style.background = "#eee";
+            }
+            callback()
+          },
 
+          handlePhoneNumber(rule, value, callback) {
+            //为了值是空的时候和“请输入手机号”两个提示同时出现
+            if(value.length==0){
+              callback()
+            }
+            const regex=/^1[0-9]{10}$/
+            if(regex.test(value)){
+              if (value.length !== 11) {
+                callback(new Error('请输入正确的手机号码'))
+              }
+              callback()
+            }else {
+              callback(new Error('请输入正确的手机号码'))
+            }
+
+            callback()
+          },
+
+          handleEmail (rule, value, callback) {
+            const { state } = this
+            const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
+            if (regex.test(value)) {
+              callback()
+            } else {
+              callback(new Error('请输入有效邮箱'))
+            }
+            callback()
+          },
 
         }
     }
