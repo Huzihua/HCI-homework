@@ -54,7 +54,7 @@ public class AccountServiceImplTest extends TestCase {
 
     @Test
     public void updateUserInfo() {
-        accountService.updateUserInfo(7,"123456","test1号","11111111112","11111@qq.com");
+        accountService.updateUserInfo(7,"123456","test1号","11111111112","11111@qq.com","2000-12-02");
         User user=accountService.getUserInfo("11111@qq.com");
         assertEquals("123456",user.getPassword());     //修改密码后对比一下
     }

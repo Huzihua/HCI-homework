@@ -47,7 +47,7 @@ public interface AccountService {
      * @param phonenumber
      * @return
      */
-    ResponseVO updateUserInfo(int id, String password, String username, String phonenumber,String email);
+    ResponseVO updateUserInfo(int id, String password, String username, String phonenumber,String email,String birth_date);
 
     /**
      * 网站营销人员撤销异常订单，恢复用户信用值
