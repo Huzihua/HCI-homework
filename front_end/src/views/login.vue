@@ -23,7 +23,7 @@
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
-        <a-tab-pane key="tab1" tab="账号密码登录">
+        <a-tab-pane key="tab1" tab="登录">
           <a-form-item>
             <a-input
               size="large"
@@ -80,7 +80,7 @@
           </a-form-item>
         </a-tab-pane>
 
-        <a-tab-pane key="tab2" tab="注册新账号">
+        <a-tab-pane key="tab2" tab="注册">
           <a-form-item>
             <a-input
               size="large"
@@ -88,7 +88,7 @@
               placeholder="邮箱"
               v-decorator="[
               'registerUserMail', 
-              {rules: [{ required: true, type: 'email', message: '请输入邮箱' }], validateTrigger: 'blur'}]">
+              {rules: [{ required: true, type: 'email', message: '请输入正确的邮箱' }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -103,40 +103,39 @@
             </a-input>
           </a-form-item>
 <!--新增性别-->
-          <a-form-item>
-            <a-select
-                    size="large"
-                    placeholder="性别"
-                    v-decorator="[
-              'registerSexType',
-              {rules: [{ required: true, message: '请选择您的性别' }], validateTrigger: 'blur'}]">
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-              <a-select-option v-for="item in sex" :key="item" :value="item">{{item}}</a-select-option>
-            </a-select>
-          </a-form-item>
+<!--          <a-form-item>-->
+<!--            <a-select-->
+<!--                    size="large"-->
+<!--                    placeholder="性别"-->
+<!--                    v-decorator="[-->
+<!--              'registerSexType',-->
+<!--              {rules: [{ required: true, message: '请选择您的性别' }], validateTrigger: 'blur'}]">-->
+<!--              <a-select-option v-for="item in sex" :key="item" :value="item">{{item}}</a-select-option>-->
+<!--            </a-select>-->
+<!--          </a-form-item>-->
 
  <!--身份证号码-->
-          <a-form-item>
-            <a-input
-                    size="large"
-                    placeholder="身份证号码"
-                    v-decorator="[
-              'registerIdNumber',
-              {rules: [{ required: true, message: '请输入您的身份证号码' },{ validator: this.handleidNumber }], validateTrigger:'blur'}]">
-              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+<!--          <a-form-item>-->
+<!--            <a-input-->
+<!--                    size="large"-->
+<!--                    placeholder="身份证号码"-->
+<!--                    v-decorator="[-->
+<!--              'registerIdNumber',-->
+<!--              {rules: [{ required: true, message: '请输入您的身份证号码' },{ validator: this.handleidNumber }], validateTrigger:'blur'}]">-->
+<!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+<!--            </a-input>-->
+<!--          </a-form-item>-->
 <!--新增出生日期-->
-          <a-form-item>
-            <a-date-picker
-                    style="width: 100%"
-                    size="large"
-                    placeholder="出生日期"
-                    v-decorator="[
-              'registerBirth_date']">
-              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-date-picker>
-          </a-form-item>
+<!--          <a-form-item>-->
+<!--            <a-date-picker-->
+<!--                    style="width: 100%"-->
+<!--                    size="large"-->
+<!--                    placeholder="出生日期"-->
+<!--                    v-decorator="[-->
+<!--              'registerBirth_date']">-->
+<!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+<!--            </a-date-picker>-->
+<!--          </a-form-item>-->
 
            <a-form-item>
             <a-input
@@ -144,7 +143,7 @@
               placeholder="手机号"
               v-decorator="[
               'registerPhoneNumber', 
-              {rules: [{ required: true, message: '请输入手机号' }], validateTrigger: 'blur'}]">
+              {rules: [{ required: true, message: '请输入手机号' }, { validator: this.handlePhoneNumber }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -272,15 +271,30 @@ export default {
    },
 
     handleidNumber(rule, value, callback) {
-      if (value.length !== 18) {
-        callback(new Error('身份证号码是18位'))
+      value="null"
+      // if (value.length !== 18) {
+      //   callback(new Error('身份证号码是18位'))
+      // }
+      callback()
+    },
+    handlePhoneNumber(rule, value, callback) {
+      const regex=/^1[0-9]{10}$/
+      if(regex.test(value)){
+        if (value.length !== 11) {
+          callback(new Error('请输入正确的手机号码'))
+        }
+        callback()
+      }else {
+        callback(new Error('请输入正确的手机号码'))
       }
+
       callback()
     },
     handlesexType(rule, value, callback) {
-      if (value !== '男'&&value !== '女') {
-        callback(new Error('请输入男或女'))
-      }
+          value="null"
+      // if (value !== '男'&&value !== '女') {
+      //   callback(new Error('请输入男或女'))
+      // }
     },
 
     handleUsernameOrEmail (rule, value, callback) {
@@ -293,19 +307,12 @@ export default {
       }
       callback()
     },
-    checkEmail(rule, value, callback) {
-        const re = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
-        if (re.test(value)) {
-            callback();
-        } else {
-            callback(new Error('请输入有效邮箱'));
-        }
-        callback()
-    },
+
     handleBirthDate(rule, value, callback){
-      if (value === ''){
-        callback(new Error('请选择出生日期'))
-      }
+      // if (value === ''){
+      //   callback(new Error('请选择出生日期'))
+      // }
+      value="null"
       callback();
     },
     handlePassword(rule, value, callback) {
@@ -334,14 +341,14 @@ export default {
         if(!err){
           this.loginLoading = true
           if(this.code==""){
-            alert("验证码不难为空！");
+            alert("验证码不能为空！");
             this.loginLoading = false;
             return;
           }
           if(this.identifyCode!==this.code){
             this.code="";
             this.refreshCode();
-            alert("请输入正确得验证码！")
+            alert("请输入正确的验证码！")
             this.loginLoading = false;
             return;
           }
