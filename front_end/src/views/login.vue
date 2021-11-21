@@ -40,7 +40,7 @@
           </a-form-item>
 
           <a-form-item>
-            <a-input
+            <a-input-password
               size="large"
               type="password"
               autocomplete="false"
@@ -51,7 +51,7 @@
               ]"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
+            </a-input-password>
           </a-form-item>
 
           <a-form-item>
@@ -148,7 +148,7 @@
             </a-input>
           </a-form-item>
           <a-form-item>
-            <a-input
+            <a-input-password
               size="large"
               type="password"
               placeholder="密码"
@@ -156,10 +156,10 @@
                 'registerPassword', 
                 {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePassword }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
+            </a-input-password>
           </a-form-item>
           <a-form-item>
-            <a-input
+            <a-input-password
               size="large"
               type="password"
               placeholder="确认密码"
@@ -167,7 +167,7 @@
                 'registerPasswordconfirm', 
                 {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePasswordCheck }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
+            </a-input-password>
           </a-form-item>
            <a-form-item style="margin-top:24px">
             <a-button
@@ -382,12 +382,13 @@ export default {
             userType: this.userTypeValue
           }
           await this.register(data).then(() => {
-            this.customActiveKey = 'tab1'
+            this.customActiveKey = 'tab2'
             this.form.setFieldsValue({
               'registerUserMail': '',
               'registerPassword': '',
-              'registerPasswordconfirm': ''
-
+              'registerPasswordconfirm': '',
+              'registerPhoneNumber': '',
+              'registerUsername': ''
             })
           })
           this.registerLoading = false
