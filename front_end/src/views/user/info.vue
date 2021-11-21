@@ -35,6 +35,7 @@
                     <a-form-item label="出生日期" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">
 
                                   <a-date-picker
+                                          placeholder="请选择您的出生日期"
                                           style="width: 100%"
                                           size="middle"
                                           v-if="modify"
