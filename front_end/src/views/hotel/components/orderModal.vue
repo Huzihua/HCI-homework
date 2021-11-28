@@ -6,6 +6,8 @@
         okText="下单"
         @cancel="cancelOrder"
         @ok="handleSubmit"
+        width="45%"
+        :dialogStyle="dialogStyle"
     >
         <a-form :form="form">
             <a-form-item v-bind="formItemLayout" label="房型信息">
@@ -50,18 +52,9 @@
                     placeholder="请选择入住人数"
                     @change="changePeopleNum"
                 >
-                    <a-select-option :value="1">
-                    1
-                    </a-select-option>
-                    <a-select-option :value="2">
-                    2
-                    </a-select-option>
-                     <a-select-option :value="3">
-                    3
-                    </a-select-option>
-                    <a-select-option :value="4">
-                    4
-                    </a-select-option>
+                  <a-select-option v-for="i in 4" :key="i">
+                    {{i}}
+                  </a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item v-bind="formItemLayout" label="有无儿童">
@@ -84,15 +77,9 @@
                     placeholder="请选择房间数"
                     @change="changeRoomNum"
                 >
-                    <a-select-option :value="1">
-                    1
-                    </a-select-option>
-                    <a-select-option :value="2">
-                    2
-                    </a-select-option>
-                     <a-select-option :value="3">
-                    3
-                    </a-select-option>
+                  <a-select-option v-for="i in 9" :key="i">
+                    {{i}}
+                  </a-select-option>
                 </a-select>
             </a-form-item>
             <a-form-item v-bind="formItemLayout" label="房间单价">
@@ -169,10 +156,13 @@ export default
                     sm: { span: 16 },
                 },
             },
-            totalPrice: '',
+            totalPrice: '0',
             columns,
             checkedList: [],
-            finalPrice: ''
+            finalPrice: '0',
+            dialogStyle: {
+              top:"10px"
+            }
         }
     },
     computed: {
@@ -223,8 +213,6 @@ export default
                 this.orderMatchCouponList.filter(item => this.checkedList.indexOf(item.id)!=-1).forEach(item => {
                     if(item.discount>0){this.finalPrice= (this.finalPrice*item.discount/10).toFixed(2)}
                     })
-            }else{
-
             }
         },
         handleSubmit(e) {
@@ -265,3 +253,16 @@ export default
     }
 }
 </script>
+
+<!--
+<style lang="scss" scoped>
+/* 周末特殊样式设置 */
+.ant-calendar-table {
+  thead {
+    th[title="周日"],
+    th[title="周六"] {
+      color: #ef9b1d;
+    }
+  }
+}
+</style>-->
