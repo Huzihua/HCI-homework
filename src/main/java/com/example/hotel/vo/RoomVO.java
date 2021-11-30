@@ -9,6 +9,16 @@ public class RoomVO {
     private Integer curNum;
     private Integer total;
 
+    /**
+     * 建议入住人数
+     */
+    private Integer peopleNum;
+
+    /**
+     * 床型
+     */
+    private String bedType;
+
     public Integer getId() {
         return id;
     }
@@ -47,5 +57,21 @@ public class RoomVO {
 
     public void setTotal(Integer total) {
         this.total = total;
+    }
+
+    public Integer getPeopleNum() {
+        return peopleNum;
+    }
+
+    public void setPeopleNum(Integer peopleNum) {
+        this.peopleNum = peopleNum;
+    }
+
+    public String getBedType() {
+        return bedType;
+    }
+
+    public void setBedType(String bedType) {
+        this.bedType = bedType;
     }
 }

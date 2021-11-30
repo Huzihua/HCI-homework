@@ -16,6 +16,16 @@ public class HotelRoom {
      */
     private int total;
 
+    /**
+     * 建议入住人数
+     */
+    private Integer peopleNum;
+
+    /**
+     * 床型
+     */
+    private String bedType;
+
     public Integer getId() {
         return id;
     }
@@ -62,5 +72,35 @@ public class HotelRoom {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public Integer getPeopleNum() {
+        return peopleNum;
+    }
+
+    public void setPeopleNum() {
+        if(roomType==null){
+            this.peopleNum = 0;
+        }else if(roomType==RoomType.Family){
+            this.peopleNum = 4;
+        }else{
+            this.peopleNum = 2;
+        }
+    }
+
+    public String getBedType() {
+        return bedType;
+    }
+
+    public void setBedType() {
+        if(roomType==null){
+            this.bedType = "";
+        }else if(roomType==RoomType.BigBed){
+            this.bedType = "大床1.8m";
+        }else if(roomType==RoomType.DoubleBed){
+            this.bedType = "双床1.5m";
+        }else{
+            this.bedType = "大床2m，小床1.5m";
+        }
     }
 }
