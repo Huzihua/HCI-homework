@@ -123,7 +123,7 @@ const user = {
             state.token = '',
             state.userId = '',
             state.userInfo = {
-                
+
             },
             state.userOrderList = []
         },
@@ -332,21 +332,21 @@ const user = {
         getUserCreditRecords: async ({state, commit}) => {
             const data = {
                 userId: Number(state.userId)
-            }
-            const res = await getUserCreditRecordsAPI(data)
+            };
+            const res = await getUserCreditRecordsAPI(data);
             if (res) {
                 commit('set_userCreditRecordList', res)
             }
         },
         getHotelByManagerId: async({commit,state}) =>{
-            const id= Number(state.userId)
-            const res = await getHotelByManagerIdAPI(id)
+            const id= Number(state.userId);
+            const res = await getHotelByManagerIdAPI(id);
             if (res){
-                commit('set_hotelList', res)
+                commit('set_hotelList', res);
                 commit('set_hotelListLoading', false)
             }
         },
     }
-}
+};
 
 export default user

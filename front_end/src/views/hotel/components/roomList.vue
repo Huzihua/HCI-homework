@@ -1,28 +1,29 @@
 <template>
-    <div class="room-list">
-        <div class="filter">
-        </div>
-        <div class="list">
-            <a-table
-                :columns="columns"
-                :dataSource="rooms"
-            >
+  <div class="room-list">
+    <div class="filter">
+    </div>
+    <div class="list">
+      <a-table
+              :columns="columns"
+              :dataSource="rooms"
+      >
                 <span slot="price" slot-scope="text">
                     <span>￥{{ text }}</span>
                 </span>
-                <span slot="action" slot-scope="record">
+        <span slot="action" slot-scope="record">
                     <a-button :disabled="record.curNum<=0" type="primary" @click="order(record)">预定</a-button>
                 </span>
-            </a-table>
-        </div>
-        <OrderModal></OrderModal>
+      </a-table>
     </div>
+    <OrderModal></OrderModal>
+  </div>
 </template>
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex'
-import OrderModal from './orderModal'
-const columns = [
-    {  
+  import {mapGetters, mapActions, mapMutations} from 'vuex'
+  import OrderModal from './orderModal'
+
+  const columns = [
+    {
       title: '房型',
       dataIndex: 'roomType',
       key: 'roomType',
@@ -46,49 +47,47 @@ const columns = [
       title: '房价',
       key: 'price',
       dataIndex: 'price',
-      scopedSlots: { customRender: 'price'}
+      scopedSlots: {customRender: 'price'}
     },
     {
       title: 'Action',
       key: 'action',
-      scopedSlots: { customRender: 'action' },
+      scopedSlots: {customRender: 'action'},
     },
   ];
-export default {
-    name:'roomList',
+  export default {
+    name: 'roomList',
     props: {
-        rooms: {
-            type: Array
-        }
+      rooms: {
+        type: Array
+      }
     },
     data() {
-        return {
-            columns,
-        }
+      return {
+        columns,
+      }
     },
     components: {
-        OrderModal
+      OrderModal
     },
     computed: {
-        ...mapGetters([
-            'orderModalVisible'
-        ])
+      ...mapGetters([
+        'orderModalVisible'
+      ])
     },
     monuted() {
 
     },
     methods: {
-        ...mapMutations([
-            'set_orderModalVisible',
-            'set_currentOrderRoom'
-        ]),
-        ...mapActions([
-
-        ]),
-        order(record) {
-            this.set_currentOrderRoom(record)
-            this.set_orderModalVisible(true)
-        }
+      ...mapMutations([
+        'set_orderModalVisible',
+        'set_currentOrderRoom'
+      ]),
+      ...mapActions([]),
+      order(record) {
+        this.set_currentOrderRoom(record)
+        this.set_orderModalVisible(true)
+      }
     }
-}
+  }
 </script>
