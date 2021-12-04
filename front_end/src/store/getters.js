@@ -15,6 +15,7 @@ const getters = {
   userCreditRecordList: state => state.user.userCreditRecordList,
 
   //admin
+  addHotelParams:state=>state.user.addHotelParams,
   managerList: state => state.user.managerList,
   updateManagerModalVisible: state => state.user.updateManagerModalVisible,
   addManagerModalVisible: state => state.user.addManagerModalVisible,

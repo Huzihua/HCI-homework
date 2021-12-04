@@ -30,6 +30,7 @@ public class AccountController {
 
     @PostMapping("/register")
     public ResponseVO registerAccount(@RequestBody UserVO userVO) {
+        userVO.setBirth_date("未填写");
         return accountService.registerAccount(userVO);
     }
 
@@ -45,7 +46,7 @@ public class AccountController {
 
     @PostMapping("/{id}/userInfo/update")
     public ResponseVO updateInfo(@RequestBody UserInfoVO userInfoVO,@PathVariable int id){
-        return accountService.updateUserInfo(id,userInfoVO.getPassword(),userInfoVO.getUserName(),userInfoVO.getPhoneNumber(),userInfoVO.getEmail());
+        return accountService.updateUserInfo(id,userInfoVO.getPassword(),userInfoVO.getUserName(),userInfoVO.getPhoneNumber(),userInfoVO.getEmail(),userInfoVO.getBirth_date());
 
     }
     @PostMapping("/{userEmail}/{amount}/userInfo/addCredit")
