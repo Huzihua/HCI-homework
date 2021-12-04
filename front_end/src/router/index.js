@@ -22,7 +22,7 @@ const routes = [
       {
         path: '/hotel/hotelList',
         name: 'hotelList',
-        component: () => import('@/views/hotel/hotelList')
+        component: () => import('@/views/hotel/newHotelList')
       },
       {
         path: '/hotel/hotelDetail/:hotelId',
