@@ -25,7 +25,7 @@ const columns = [
     {
       align:'center',
     },
-    {  
+    {
       title: '房型',
       dataIndex: 'roomType',
       key: 'roomType',
@@ -52,7 +52,7 @@ const columns = [
       scopedSlots: { customRender: 'price'}
     },
     {
-      title: 'Action',
+      title: '',
       key: 'action',
       scopedSlots: { customRender: 'action' },
     },

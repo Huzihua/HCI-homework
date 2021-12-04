@@ -70,10 +70,10 @@
               </div>
             </a-spin>
           </a-layout-content>
-          <a-layout-footer>
-            <a-pagination showQuickJumper :total="hotelList.totalElements" :defaultCurrent="1"
-                          @change="pageChange"></a-pagination>
-          </a-layout-footer>
+<!--          <a-layout-footer>-->
+<!--            <a-pagination showQuickJumper :total="hotelList.totalElements" :defaultCurrent="1"-->
+<!--                          @change="pageChange"></a-pagination>-->
+<!--          </a-layout-footer>-->
         </a-layout>
       </div>
       <!--            </a-layout-content>-->

@@ -11,14 +11,15 @@
         <br><br>
         <!--星级-->
         <span class="hotel_content" style="float: left; font-weight: bold">
-        星级：<a-rate style="font-size: 15px" :value="starDic.indexOf(hotel.hotelStar) + 1"/>
+        星级：<a-rate style="font-size: 15px; margin-left: 3px" :value="starDic.indexOf(hotel.hotelStar) + 1"/>
         </span>
         <!--评分-->
         <span class="score hotel_content">{{hotel.rate.toFixed(1)}}</span>
         <br>
         <!--地址 & 商圈-->
         <span class="hotel_content" style="float: left; margin-top: 6px; margin-bottom: 10px">
-          {{hotel.address}} / {{hotel.bizRegion}}
+          <span style="font-weight: bold">地址：</span>
+          {{hotel.address}}
         </span>
         <!--水平分割线-->
         <a-divider style="margin-left: 10px"></a-divider>
@@ -29,7 +30,12 @@
         <!--优惠活动-->
         <!--起价-->
         <br>
-        <span class="hotel_content price"><span style="font-weight: bold; font-size: 25px; color: rgb(24, 144, 255)">¥{{floorPrice}}</span> 起</span>
+        <span v-if="floorPrice !== 99999" class="hotel_content price">
+          <span style="font-weight: bold; font-size: 25px; color: rgb(24, 144, 255)">
+            ¥{{floorPrice}}
+          </span> 起
+        </span>
+        <span v-else class="hotel_content price">暂无可订房型</span>
       </template>
     </a-card-meta>
   </a-card>
@@ -100,7 +106,7 @@
   /* 酒店评分 */
   .score {
     background-color: rgb(24, 144, 255);
-    padding: 7px 10px;
+    padding: 6px 10px;
     border-radius: 8px;
     color: white;
     font-weight: bold;
