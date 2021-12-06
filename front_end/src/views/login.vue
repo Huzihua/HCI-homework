@@ -83,6 +83,18 @@
         <a-tab-pane key="tab2" tab="注册">
           <a-form-item>
             <a-input
+                size="large"
+                placeholder="用户名"
+                v-decorator="[
+              'registerUsername',
+              {rules: [{ required: true, message: '请输入用户名' }], validateTrigger: 'blur'}]">
+              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input>
+          </a-form-item>
+
+          <a-form-item>
+
+            <a-input
               size="large"
               type="email"
               placeholder="邮箱"
@@ -90,18 +102,31 @@
               'registerUserMail', 
               {rules: [{ required: true, type: 'email', message: '请输入正确的邮箱' }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+
             </a-input>
+
+
           </a-form-item>
+
           <a-form-item>
+            <div class="form-group" style="display: flex;">
             <a-input
-              size="large"
-              placeholder="用户名"
-              v-decorator="[
-              'registerUsername', 
-              {rules: [{ required: true, message: '请输入用户名' }], validateTrigger: 'blur'}]">
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+
+                size="large"
+                type="code"
+                placeholder="邮件验证码"
+
+                v-decorator="[
+              'registerCode',
+              {rules: [{ required: true, type: 'book', message: '验证码错误或已过期' }], validateTrigger: 'blur'}]"><a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
+              <div>
+                <a-button size="large" @click="sendcode" v-if="issend">获取验证码</a-button>
+                <a-button size="large" v-if="!issend" disabled type="primary">{{ count }}s后可再次发送</a-button>
+              </div>
+            </div>
           </a-form-item>
+
 
 <!--新增性别-->
 <!--          <a-form-item>-->
@@ -138,16 +163,17 @@
 <!--            </a-date-picker>-->
 <!--          </a-form-item>-->
 
-           <a-form-item>
-            <a-input
-              size="large"
-              placeholder="手机号"
-              v-decorator="[
-              'registerPhoneNumber', 
-              {rules: [{ required: true, message: '请输入手机号' }, { validator: this.handlePhoneNumber }], validateTrigger: 'blur'}]">
-              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+<!--           <a-form-item>-->
+<!--            <a-input-->
+<!--              size="large"-->
+<!--              placeholder="手机号"-->
+<!--              maxlength=11-->
+<!--              v-decorator="[-->
+<!--              'registerPhoneNumber', -->
+<!--              {rules: [{ required: true, message: '请输入手机号' }, { validator: this.handlePhoneNumber }], validateTrigger: 'blur'}]">-->
+<!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+<!--            </a-input>-->
+<!--          </a-form-item>-->
           <a-form-item>
             <a-input-password
               size="large"
@@ -225,12 +251,14 @@ export default {
       identifyCodes: "1234567890",
       identifyCode: "",
       code:"",//text框输入的验证码
-
+      count: 60,
+      issend: true
     }
   },
   computed: {
     ...mapGetters([
-      'token'
+      'token',
+      'isRegistered'
     ])
   },
   mounted() {
@@ -249,6 +277,7 @@ export default {
   methods: {
     ...mapActions([
       'login',
+      'sendMail',
       'register',
       'checkAllOrders'
     ]),
@@ -432,6 +461,7 @@ export default {
           this.registerLoading = true
           const data = {
             email: this.form.getFieldValue('registerUserMail'),
+            registerCode: this.form.getFieldValue('registerCode'),
             password: this.$md5(this.form.getFieldValue('registerPassword')).toString().substring(0,10),
             sexType: this.form.getFieldValue('registerSexType'),           //新增用户性别
             idNumber: this.form.getFieldValue('registerIdNumber'),
@@ -442,24 +472,49 @@ export default {
             credit: 100,
             userType: this.userTypeValue
           }
-          await this.register(data).then(() => {
-            this.customActiveKey = 'tab2'
+          await this.register(data).then((result) => {
+            this.customActiveKey = 'tab1'
             document.getElementById("one").style.background = "#eee";
             document.getElementById("two").style.background = "#eee";
             document.getElementById("three").style.background = "#eee";
             this.form.setFieldsValue({
               'registerUserMail': '',
+              'registerCode': '',
               'registerPassword': '',
               'registerPasswordconfirm': '',
               'registerPhoneNumber': '',
               'registerUsername': ''
             })
           })
+
           this.registerLoading = false
         }
       });
+    },
+      sendcode() {
+        if(this.form.getFieldValue('registerUserMail').length==0){
+          this.issend = true;
+        }
+        const TIME_COUNT = 60;
+        if (!this.timer) {
+          this.count = TIME_COUNT;
+          this.issend = false;
+          const data = this.form.getFieldValue('registerUserMail')
+          console.log(data)
+          this.sendMail(data)
+          //这里可以插入$axios调用后台接口
+          this.timer = setInterval(() => {
+            if (this.count > 0 && this.count <= TIME_COUNT) {
+              this.count--;
+            } else {
+              this.issend = true;
+              clearInterval(this.timer);
+              this.timer = null;
+            }
+          }, 1000);
+        }
+      }
     }
-  }
 }
 </script>
 

@@ -11,6 +11,7 @@ public class User {
     private String phoneNumber;
     private double credit;
     private UserType userType;
+    private String registerCode;
     /**
      * 新增3个用户得属性：性别、出生日期、身份证号码
      * @author: 胡子华
@@ -20,6 +21,14 @@ public class User {
     private String birth_date;   //用户出生日期
     private String idNumber;      //用户身份证号码
     private String vip_level;    //VIP等级
+
+    public String getRegisterCode() {
+        return registerCode;
+    }
+
+    public void setRegisterCode(String registerCode) {
+        this.registerCode = registerCode;
+    }
 
     public Integer getId() {
         return id;

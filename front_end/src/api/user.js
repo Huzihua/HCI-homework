@@ -1,4 +1,5 @@
 import { axios } from '@/utils/request'
+import {message} from "ant-design-vue";
 
 const api = {
     userPre: '/api/user'
@@ -17,6 +18,15 @@ export function registerAPI(data){
         data
     })
 }
+
+export function sendMailAPI(data){
+    return axios({
+        url: `${api.userPre}/sendMail`,
+        method: 'POST',
+        data
+    })
+}
+
 export function getUserInfoAPI(id){
     return axios({
         url: `${api.userPre}/${id}/getUserInfo`,

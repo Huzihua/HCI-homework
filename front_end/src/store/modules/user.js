@@ -6,6 +6,7 @@ import { message } from 'ant-design-vue'
 import {
     loginAPI,
     registerAPI,
+    sendMailAPI,
     getUserInfoAPI,
     updateUserInfoAPI,
     getUserCreditRecordsAPI
@@ -80,6 +81,7 @@ const user = {
         userCreditRecordList: [
 
         ],
+        isRegistered:false,
     },
 
     mutations: {
@@ -168,10 +170,18 @@ const user = {
                 })
             }
         },
-        register: async({ commit }, data) => {
-            const res = await registerAPI(data)
+        register: async({ commit ,state}, data) => {
+            const res= await registerAPI(data)
             if(res){
                 message.success('注册成功')
+                return Promise.resolve(true)
+            }
+            return Promise.reject(false)
+        },
+        sendMail: async({ commit },data)=>{
+            const res=await sendMailAPI(data)
+            if(res){
+                message.success('成功发送验证码，请注意查收')
             }
         },
         getUserInfo({ state, commit }) {

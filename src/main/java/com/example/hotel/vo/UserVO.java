@@ -14,6 +14,7 @@ public class UserVO {
     private String phoneNumber;
     private double credit;
     private UserType userType;
+    private String registerCode;
 
     /**
      * 新增四个用户得属性：性别、VIP等级、余额、出生日期
@@ -25,6 +26,14 @@ public class UserVO {
     private double  balance;     //用户账号钱余额
     private String birth_date;   //用户出生日期
     private String idNumber;    //用户身份证号码
+
+    public String getRegisterCode() {
+        return registerCode;
+    }
+
+    public void setRegisterCode(String registerCode) {
+        this.registerCode = registerCode;
+    }
 
     public Integer getId() {
         return id;
