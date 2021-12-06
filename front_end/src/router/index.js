@@ -7,18 +7,24 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
   },
   {
     path: '/',
     redirect: '/NJUSE'
   },
+
   {
     path: '/NJUSE',
     name: 'layout',
     redirect: '/hotel/hotelList',
     component: () => import('../views/layout'),
     children: [
+      {
+        path: '/user/retrievePassword',
+        name: 'retrievePassword',
+        component:()=>import('../views/user/retrievePassword')
+      },
       {
         path: '/hotel/hotelList',
         name: 'hotelList',
@@ -48,7 +54,7 @@ const routes = [
         path: '/marketer/marketer',
         name: 'marketer',
         component: () => import('../views/marketer/marketer')
-      }
+      },
     ]
   },
 ];
