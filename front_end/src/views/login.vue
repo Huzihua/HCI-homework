@@ -68,16 +68,33 @@
                            </div>
 
           </a-form-item>
-
           <a-form-item style="margin-top:24px">
             <a-button
-              size="large"
-              type="primary"
-              class="login-button"
-              :loading="loginLoading"
-              @click="handlelogin()"
+                size="large"
+                type="primary"
+                class="login-button"
+                :loading="loginLoading"
+                @click="handlelogin()"
             >确定</a-button>
           </a-form-item>
+
+<!--加验证码登录和忘记密码功能-->
+          <a-button
+              type="link"
+              class="code-login-button"
+              style="float:left;"
+              :disabled="codeloginDisabled"
+              @click="handleCodeLogin()"
+          >验证码登录
+          </a-button>
+
+          <a-button
+              type="link"
+              class="forget-passwd-button"
+              style="float:right;"
+              @click="handleForgetPasswd"
+          >忘记密码</a-button>
+
         </a-tab-pane>
 
         <a-tab-pane key="tab2" tab="注册">
@@ -229,25 +246,29 @@
 
 <script >
 import { mapGetters, mapActions, mapMutations } from 'vuex'
+import router from '@/router'
 const moment = require('moment')
 import SIdentify from "./user/components/varifyCode";
+import retrievePassword from "./user/retrievePassword";
 import Vue from 'vue'
 
 export default {
 
   name: 'login',
   components: {
-    SIdentify
+    SIdentify,
+
   },
   data () {
     return {
+
       customActiveKey: 'tab1',
       loginLoading: false,
       registerLoading: false,
       form: this.$form.createForm(this),
       userTypeValue: 0,
       sex: ['男', '女'],
-
+      codeloginDisabled:false,
       identifyCodes: "1234567890",
       identifyCode: "",
       code:"",//text框输入的验证码
@@ -502,7 +523,7 @@ export default {
           const data = this.form.getFieldValue('registerUserMail')
           console.log(data)
           this.sendMail(data)
-          //这里可以插入$axios调用后台接口
+
           this.timer = setInterval(() => {
             if (this.count > 0 && this.count <= TIME_COUNT) {
               this.count--;
@@ -513,7 +534,13 @@ export default {
             }
           }, 1000);
         }
-      }
+      },
+    handleCodeLogin(){
+
+    },
+    handleForgetPasswd(){
+    router.push({name: 'retrievePassword'})
+    }
     }
 }
 </script>
