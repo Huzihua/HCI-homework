@@ -1,25 +1,24 @@
 <template>
   <div class="header">
-    <div class="label">
+    <div class="label" >
       <img src="@/assets/logo.svg" class="logo" alt="logo" @click="jumpToHome">
-      <span class="title">NJUSE 酒店管理系统</span>
-
+      <a-button class="title"  type="link" @click="jumpToHome">NJUSE 酒店管理系统</a-button>
     </div>
     <a-menu v-model="current" mode="horizontal" theme="light">
 
-      <a-menu-item key="1">
-        <router-link to="/hotel/hotelList">
-          <a-icon type="home"/>
-          首页
-        </router-link>
-      </a-menu-item>
+<!--      <a-menu-item key="1">-->
+<!--        <router-link to="/hotel/hotelList">-->
+<!--          <a-icon type="home"/>-->
+<!--          首页-->
+<!--        </router-link>-->
+<!--      </a-menu-item>-->
 
-      <a-menu-item key="2" @click="jumpToUserInfo" v-if="userInfo.userType==='Client'">
-        <router-link :to="{ name: 'info' }">
-          <a-icon type="user"/>
-          个人中心
-        </router-link>
-      </a-menu-item>
+<!--      <a-menu-item key="2" @click="jumpToUserInfo" v-if="userInfo.userType==='Client'">-->
+<!--        <router-link :to="{ name: 'info' }">-->
+<!--          <a-icon type="user"/>-->
+<!--          个人中心-->
+<!--        </router-link>-->
+<!--      </a-menu-item>-->
 
       <a-menu-item key="3" v-if="userInfo.userType==='HotelManager'">
         <router-link :to="{ name: 'manageHotel'}">
@@ -73,7 +72,7 @@
   import {mapGetters, mapActions, mapMutations} from 'vuex'
 
   export default {
-    name: '',
+    name: 'header',
     data() {
       return {
         current: ['1'],
@@ -144,7 +143,7 @@
         this.$router.push({name: 'userInfo', params: {userId: this.userId}})
       },
       jumpToHome() {
-
+        this.$router.push('/hotel/hotelList')
       }
     }
   }
@@ -167,18 +166,18 @@
       .logo {
         height: 44px;
         vertical-align: top;
-        margin-right: 16px;
+        margin-right: 12px;
         border-style: none;
         cursor: pointer;
       }
 
       .title {
-        font-size: 33px;
+        font-size: 34px;
         color: rgba(0, 0, 0, .85);
         font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
         font-weight: 600;
         position: relative;
-        top: 2px;
+        top: -2px;
       }
 
       .search {
