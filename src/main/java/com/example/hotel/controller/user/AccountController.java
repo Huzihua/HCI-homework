@@ -46,7 +46,6 @@ public class AccountController {
         return emailService.send(recever);
     }
 
-
     @GetMapping("/{id}/getUserInfo")
     public ResponseVO getUserInfo(@PathVariable int id) {
         User user = accountService.getUserInfo(id);
@@ -59,7 +58,6 @@ public class AccountController {
     @PostMapping("/{id}/userInfo/update")
     public ResponseVO updateInfo(@RequestBody UserInfoVO userInfoVO, @PathVariable int id) {
         return accountService.updateUserInfo(id, userInfoVO.getPassword(), userInfoVO.getUserName(), userInfoVO.getPhoneNumber(), userInfoVO.getEmail(), userInfoVO.getBirth_date());
-
     }
 
     @PostMapping("/{userEmail}/{amount}/userInfo/addCredit")
