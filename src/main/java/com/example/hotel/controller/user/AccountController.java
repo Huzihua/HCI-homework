@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
+
 @RestController()
 @RequestMapping("/api/user")
 public class AccountController {
@@ -22,13 +23,21 @@ public class AccountController {
 
     @PostMapping("/login")
     public ResponseVO login(@RequestBody UserForm userForm) {
-        User user = accountService.login(userForm);
-        if (user == null) {
-            return ResponseVO.buildFailure(ACCOUNT_INFO_ERROR);
-        }
-        return ResponseVO.buildSuccess(user);
+        System.out.println(userForm.getPassword());
+        System.out.println(userForm.getLoginVarifyCode());
+        return accountService.login(userForm);
 
     }
+
+//    @PostMapping("/loginWithCode")
+//    public ResponseVO login(@RequestBody UserVO uservo) {
+//        User user = accountService.loginWithCode(uservo);
+//        if (user == null) {
+//            return ResponseVO.buildFailure("用户不存在或验证码错误");
+//        }
+//        return ResponseVO.buildSuccess(user);
+//
+//    }
 
     @PostMapping("/register")
     public ResponseVO registerAccount(@RequestBody UserVO userVO) {
@@ -37,34 +46,34 @@ public class AccountController {
         return accountService.registerAccount(userVO);
     }
 
-    //    发送验证码到邮箱
+//    发送验证码到邮箱
     @PostMapping("/sendMail")
-    public ResponseVO sendMail(@RequestBody String recever) {
-        recever = recever.replace("%40", "@");
-        recever = recever.substring(0, recever.length() - 1);
+    public ResponseVO sendMail(@RequestBody String recever){
+        recever=recever.replace("%40","@");
+        recever=recever.substring(0,recever.length()-1);
         System.out.println(recever);
         return emailService.send(recever);
     }
 
+
     @GetMapping("/{id}/getUserInfo")
     public ResponseVO getUserInfo(@PathVariable int id) {
         User user = accountService.getUserInfo(id);
-        if (user == null) {
+        if(user==null){
             return ResponseVO.buildFailure(ACCOUNT_INFO_ERROR);
         }
         return ResponseVO.buildSuccess(user);
     }
 
     @PostMapping("/{id}/userInfo/update")
-    public ResponseVO updateInfo(@RequestBody UserInfoVO userInfoVO, @PathVariable int id) {
-        return accountService.updateUserInfo(id, userInfoVO.getPassword(), userInfoVO.getUserName(), userInfoVO.getPhoneNumber(), userInfoVO.getEmail(), userInfoVO.getBirth_date());
-    }
+    public ResponseVO updateInfo(@RequestBody UserInfoVO userInfoVO,@PathVariable int id){
+        return accountService.updateUserInfo(id,userInfoVO.getPassword(),userInfoVO.getUserName(),userInfoVO.getPhoneNumber(),userInfoVO.getEmail(),userInfoVO.getBirth_date());
 
+    }
     @PostMapping("/{userEmail}/{amount}/userInfo/addCredit")
     public ResponseVO addCreditForUser(@PathVariable String userEmail, @PathVariable double amount) {
-        return accountService.addCreditForUser(userEmail, amount);
+        return accountService.addCreditForUser(userEmail,amount);
     }
-
     @GetMapping("/{userId}/getUserCreditRecords")
     public ResponseVO retrieveUserCreditRecords(@PathVariable int userId) {
         return ResponseVO.buildSuccess(accountService.getUserCreditRecords(userId));
