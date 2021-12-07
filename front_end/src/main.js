@@ -7,23 +7,23 @@ import store from './store'
 import '@/permission'
 import md5 from 'js-md5'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 const options = {
   namespace: 'pro__',
   name: 'ls',
   storage: 'local'
-}
-Vue.use(Antd)
+};
+Vue.use(Antd);
 
 Vue.directive('title', {
   inserted: function (el, binding) {
     document.title = el.dataset.title
   }
-})
+});
 /*md5密码加密*/
 Vue.prototype.$md5=md5;
 new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');

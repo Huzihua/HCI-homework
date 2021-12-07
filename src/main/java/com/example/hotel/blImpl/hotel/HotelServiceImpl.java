@@ -124,6 +124,8 @@ public class HotelServiceImpl implements HotelService {
             roomVO.setRoomType(r.getRoomType().toString());
             roomVO.setCurNum(r.getCurNum());
             roomVO.setTotal(r.getTotal());
+            roomVO.setPeopleNum(r.getPeopleNum());
+            roomVO.setBedType(r.getBedType());
             return roomVO;
         }).collect(Collectors.toList());
         hotelVO.setRooms(roomVOS);

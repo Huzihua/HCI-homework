@@ -22,7 +22,10 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import OrderModal from './orderModal'
 const columns = [
-    {  
+    {
+      align:'center',
+    },
+    {
       title: '房型',
       dataIndex: 'roomType',
       key: 'roomType',
@@ -38,7 +41,7 @@ const columns = [
       key: 'curNum',
     },
     {
-      title: '入住人数',
+      title: '建议入住人数',
       key: 'peopleNum',
       dataIndex: 'peopleNum',
     },
@@ -49,7 +52,7 @@ const columns = [
       scopedSlots: { customRender: 'price'}
     },
     {
-      title: 'Action',
+      title: '',
       key: 'action',
       scopedSlots: { customRender: 'action' },
     },

@@ -24,15 +24,15 @@
                             <span class="value">{{ currentHotelInfo.address }}</span>
                         </div>
                         <div class="items" v-if="currentHotelInfo.rate">
-                            <span class="label">评分:</span> 
+                            <span class="label">评分:</span>
                             <span class="value">{{ currentHotelInfo.rate.toFixed(1) }}</span>
                         </div>
                         <div class="items" v-if="currentHotelInfo.hotelStar">
-                            <span class="label">星级:</span> 
+                            <span class="label">星级:</span>
                             <a-rate style="font-size: 15px" :value="starDic.indexOf(currentHotelInfo.hotelStar) + 1" disabled allowHalf/>
                         </div>
                         <div class="items" v-if="currentHotelInfo.description">
-                            <span class="label">酒店简介:</span> 
+                            <span class="label">酒店简介:</span>
                             <span class="value">{{ currentHotelInfo.description }}</span>
                         </div>
                     </div>
@@ -74,14 +74,14 @@ export default {
         ])
     },
     mounted() {
-        this.set_currentHotelId(Number(this.$route.params.hotelId))
-        this.getHotelById()
-        this.getHotelComments()//新增
+        this.set_currentHotelId(Number(this.$route.params.hotelId));
+        this.getHotelById();
+        this.getHotelComments();//新增
     },
     beforeRouteUpdate(to, from, next) {
-        this.set_currentHotelId(Number(to.params.hotelId))
-        this.getHotelById()
-        this.getHotelComments()//新增
+        this.set_currentHotelId(Number(to.params.hotelId));
+        this.getHotelById();
+        this.getHotelComments();//新增
         next()
     },
     methods: {

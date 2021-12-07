@@ -7,10 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 //(exclude= {DataSourceAutoConfiguration.class})//hzh020.0618 额外加的
 @EnableScheduling
 @SpringBootApplication
-
 public class HotelApplication {
-
-
 
     public static void main(String[] args) {
         SpringApplication.run(HotelApplication.class, args);

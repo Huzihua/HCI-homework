@@ -13,8 +13,9 @@ const getters = {
   orderMatchCouponList: state => state.hotel.orderMatchCouponList,
   commentList: state => state.hotel.commentList,
   userCreditRecordList: state => state.user.userCreditRecordList,
-
+  isRegistered: state=> state.user.isRegistered,
   //admin
+  addHotelParams:state=>state.user.addHotelParams,
   managerList: state => state.user.managerList,
   updateManagerModalVisible: state => state.user.updateManagerModalVisible,
   addManagerModalVisible: state => state.user.addManagerModalVisible,
@@ -36,8 +37,8 @@ const getters = {
   updateHotelModalVisible: state => state.hotelManager.updateHotelModalVisible,
   deleteHotelModalVisible: state => state.hotelManager.deleteHotelModalVisible,
   //order
-  currentOrderId: state => state.order.currentOrderId,     
-  currentOrderInfo: state => state.order.currentOrderInfo, 
+  currentOrderId: state => state.order.currentOrderId,
+  currentOrderInfo: state => state.order.currentOrderInfo,
   //marketer
   abnormalOrderList: state => state.marketer.abnormalOrderList,
   currentOrderList:state => state.marketer.currentOrderList,
@@ -46,6 +47,6 @@ const getters = {
   currentCouponId: state => state.marketer.currentCouponId,
   currentCouponInfo: state => state.marketer.currentCouponInfo,
   couponDetailVisible: state => state.marketer.couponDetailVisible,
-  }
-  
+  };
+
   export default getters

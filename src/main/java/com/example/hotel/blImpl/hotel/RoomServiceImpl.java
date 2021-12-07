@@ -17,7 +17,12 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<HotelRoom> retrieveHotelRoomInfo(Integer hotelId) {
-        return roomMapper.selectRoomsByHotelId(hotelId);
+        List<HotelRoom> hotelRooms = roomMapper.selectRoomsByHotelId(hotelId);
+        for(HotelRoom room : hotelRooms){
+            room.setPeopleNum();
+            room.setBedType();
+        }
+        return hotelRooms;
     }
 
     @Override

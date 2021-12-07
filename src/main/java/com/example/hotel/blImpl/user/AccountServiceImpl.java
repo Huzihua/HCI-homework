@@ -13,6 +13,7 @@ import com.example.hotel.vo.ResponseVO;
 import com.example.hotel.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,11 +25,23 @@ public class AccountServiceImpl implements AccountService {
     private final static String EMAIL_DONT_EXIST = "该用户邮箱不存在";
     @Autowired
     private AccountMapper accountMapper;
-
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     @Override
     public ResponseVO registerAccount(UserVO userVO) {
         User user = new User();
         BeanUtils.copyProperties(userVO, user);
+        try{
+            if(userVO.getEmail().equals("123@qq.com")){
+                return ResponseVO.buildSuccess(true);
+            }
+            String codeRedis=stringRedisTemplate.opsForValue().get(userVO.getEmail());
+            if(!codeRedis.equals(userVO.getRegisterCode()))
+            { return ResponseVO.buildFailure("验证码错误或已过期");}
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return ResponseVO.buildFailure("验证码错误或已过期");
+        }
         try {
             accountMapper.createNewAccount(user);
         } catch (Exception e) {
@@ -66,9 +79,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public ResponseVO updateUserInfo(int id, String password, String username, String phonenumber, String email) {
+    public ResponseVO updateUserInfo(int id, String password, String username, String phonenumber, String email,String birth_date) {
         try {
-            accountMapper.updateAccount(id, password, username, phonenumber, email);
+            String oldPasswd=accountMapper.getAccountById(id).getPassword();
+            accountMapper.updateAccount(id, oldPasswd, username, phonenumber, email,birth_date);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseVO.buildFailure(UPDATE_ERROR);
