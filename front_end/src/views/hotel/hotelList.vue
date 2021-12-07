@@ -70,10 +70,11 @@
               </div>
             </a-spin>
           </a-layout-content>
-<!--          <a-layout-footer>-->
+          <a-layout-footer>
+            <a-divider style="color: rgb(140,140,140); font-weight: lighter">没有更多酒店了</a-divider>
 <!--            <a-pagination showQuickJumper :total="hotelList.totalElements" :defaultCurrent="1"-->
 <!--                          @change="pageChange"></a-pagination>-->
-<!--          </a-layout-footer>-->
+          </a-layout-footer>
         </a-layout>
       </div>
       <!--            </a-layout-content>-->

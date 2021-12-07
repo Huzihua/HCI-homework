@@ -7,7 +7,7 @@ import admin from './modules/admin'
 import getters from './getters'
 import marketer from './modules/marketer'
 import order from './modules/order'
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
