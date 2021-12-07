@@ -23,9 +23,17 @@ public class AccountController {
 
     @PostMapping("/login")
     public ResponseVO login(@RequestBody UserForm userForm) {
-        User user = accountService.login(userForm);
+        System.out.println(userForm.getPassword());
+        System.out.println(userForm.getLoginVarifyCode());
+        return accountService.login(userForm);
+
+    }
+
+    @PostMapping("/loginWithCode")
+    public ResponseVO login(@RequestBody UserVO uservo) {
+        User user = accountService.loginWithCode(uservo);
         if (user == null) {
-            return ResponseVO.buildFailure(ACCOUNT_INFO_ERROR);
+            return ResponseVO.buildFailure("用户不存在或验证码错误");
         }
         return ResponseVO.buildSuccess(user);
 

@@ -52,12 +52,22 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public User login(UserForm userForm) {
+    public ResponseVO login(UserForm userForm) {
         User user = accountMapper.getAccountByName(userForm.getEmail());
-        if (null == user || !user.getPassword().equals(userForm.getPassword())) {
-            return null;
+        try {
+            String codeRedis = stringRedisTemplate.opsForValue().get(userForm.getEmail());
+            if (codeRedis.equals(userForm.getLoginVarifyCode())) {
+                return ResponseVO.buildSuccess(user);
+            }else{
+                return ResponseVO.buildFailure("用户名不存在或验证码错误或过期");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
-        return user;
+        if (null == user || !user.getPassword().equals(userForm.getPassword())) {
+            return ResponseVO.buildFailure("用户名或密码错误");
+        }
+        return ResponseVO.buildSuccess(user);
     }
 
     @Override
@@ -161,5 +171,6 @@ public class AccountServiceImpl implements AccountService {
     public List<CreditRecord> getUserCreditRecords(int userid) {
         return accountMapper.getUserCreditRecords(userid);
     }
+
 }
 

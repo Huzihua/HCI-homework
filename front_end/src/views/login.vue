@@ -38,10 +38,11 @@
             </a-input>
           </a-form-item>
 
-          <a-form-item>
+          <a-form-item v-if="isCodeLogin">
             <a-input-password
                     size="large"
                     type="password"
+
                     autocomplete="false"
                     placeholder="密码"
                     v-decorator="[
@@ -53,8 +54,8 @@
             </a-input-password>
           </a-form-item>
 
-          <a-form-item>
-            <div class="form-group" style="display: flex;">
+          <a-form-item v-if="isCodeLogin">
+            <div class="form-group"  style="display: flex;">
               <a-input size="large" type="text" id="code" v-model="code" class="code" placeholder="请输入您的验证码">
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
@@ -65,8 +66,26 @@
                 <s-identify :identifyCode="identifyCode"></s-identify>
               </div>
             </div>
-
           </a-form-item>
+            <a-form-item  v-if="!isCodeLogin">
+              <div class="form-group"  style="display: flex;">
+                <a-input
+                    size="large"
+                    type="code"
+                    placeholder="邮件验证码"
+                    v-decorator="[
+              'loginVarifyCode',
+              {rules: [{ required: true, type: 'book', message: '验证码错误或已过期' }], validateTrigger: 'blur'}]">
+                  <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+                </a-input>
+                <div>
+                  <a-button size="large" @click="sendLogincode" v-if="issendLogin">获取验证码</a-button>
+                  <a-button size="large" v-if="!issendLogin" disabled type="primary">{{ count }}s后可再次发送</a-button>
+                </div>
+              </div>
+            </a-form-item>
+
+
           <a-form-item style="margin-top:24px">
             <a-button
                     size="large"
@@ -85,7 +104,8 @@
                   style="float:left;"
                   :disabled="codeloginDisabled"
                   v-on:click="handleCodeLogin"
-          >邮箱验证码登录
+          ><span v-if="isCodeLogin">邮箱验证码登录</span>
+            <span v-if="!isCodeLogin">密码登录</span>
           </a-button>
 
           <a-button
@@ -274,7 +294,11 @@
         identifyCode: "",
         code: "",//text框输入的验证码
         count: 60,
-        issend: true
+        countLogin:60,
+        issend: true,
+        issendLogin:true,
+        isCodeLogin:true,
+        textLoginWay:"邮箱验证码登录"
       }
     },
     computed: {
@@ -452,29 +476,34 @@
         this.form.validateFields(validateFieldsKey, {force: true}, async (err, values) => {
           if (!err) {
             this.loginLoading = true;
-            if (this.code === "") {
+
+            if (this.code === "" && this.isCodeLogin) {
               alert("验证码不能为空！");
               this.loginLoading = false;
               return;
             }
-            if (this.identifyCode !== this.code) {
+            if (this.identifyCode !== this.code && this.isCodeLogin) {
               this.code = "";
               this.refreshCode();
               alert("请输入正确的验证码！");
               this.loginLoading = false;
               return;
             }
-
+            var passwd=this.form.getFieldValue("password")
+            if(!this.isCodeLogin){
+              passwd="000000"
+            }
             const data = {
               email: this.form.getFieldValue("username"),
-              password: this.$md5(this.form.getFieldValue("password")).toString().substring(0, 10)
+              password: this.$md5(passwd).toString().substring(0, 10),
+              loginVarifyCode:this.form.getFieldValue('loginVarifyCode')
             };
+            console.log(this.form.getFieldValue('loginVarifyCode'))
             await this.login(data);
             this.loginLoading = false
           }
         })
       },
-
       handleRegister() {
         const {form: {validateFields}} = this;
         const validateFieldsKey = this.customActiveKey === 'tab1' ? ['username', 'password'] : ['registerUsername', 'registerPhoneNumber', 'registerUserMail', 'registerPassword', 'registerPasswordconfirm']
@@ -536,8 +565,32 @@
           }, 1000);
         }
       },
-      handleCodeLogin() {
+      sendLogincode() {
+        console.log(this.form.getFieldValue('username'))
+        if (this.form.getFieldValue('username').length == 0) {
+          this.issendLogin = true;
+        }
+        const TIME_COUNT = 60;
+        if (!this.timer) {
+          this.countLogin = TIME_COUNT;
+          this.issendLogin = false;
+          const data = this.form.getFieldValue('username');
+          console.log(data);
+          this.sendMail(data);
 
+          this.timer = setInterval(() => {
+            if (this.countLogin > 0 && this.countLogin <= TIME_COUNT) {
+              this.countLogin--;
+            } else {
+              this.issendLogin = true;
+              clearInterval(this.timer);
+              this.timer = null;
+            }
+          }, 1000);
+        }
+      },
+      handleCodeLogin() {
+          this.isCodeLogin=!this.isCodeLogin;
       },
       handleForgetPasswd() {
       }

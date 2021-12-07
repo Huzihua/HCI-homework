@@ -17,6 +17,17 @@ public class UserForm {
     private String userName;
 
     private String phoneNumber;
+
+    private String loginVarifyCode;
+
+    public String getLoginVarifyCode() {
+        return loginVarifyCode;
+    }
+
+    public void setLoginVarifyCode(String loginVarifyCode) {
+        this.loginVarifyCode = loginVarifyCode;
+    }
+
     public String getEmail() {
         return email;
     }

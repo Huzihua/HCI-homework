@@ -22,7 +22,7 @@ public interface AccountService {
      *
      * @return
      */
-    User login(UserForm userForm);
+    ResponseVO login(UserForm userForm);
 
     /**
      * 获取用户个人信息
@@ -80,5 +80,6 @@ public interface AccountService {
      * @return
      */
     List<CreditRecord> getUserCreditRecords(int userid);
+
 
 }
