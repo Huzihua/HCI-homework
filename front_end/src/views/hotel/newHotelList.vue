@@ -2,8 +2,7 @@
   <div>
   <div class="list-search-container">
     <div class="inner-wrap">
-
-        <div class="search-container">
+        <div class="search-container" id="search-con">
 
           <div class="search-box">
             <div class="search-box-header">目的地</div>
@@ -25,11 +24,55 @@
           <a-button @click="searchHotel" type="primary" style="height: 60px"><a-icon type="search" style="font-size: 25px"></a-icon></a-button>
           </a-form-item>
         </div>
-      <div>
-      </div>
     </div>
   </div>
-    <div><HotelCard></HotelCard></div>
+    <div class="hotelList">
+      <a-layout>
+        <a-layout-header v-if="search" style="background-color: transparent; padding: 0">
+          <a-menu v-model="currentOrder" mode="horizontal" :default-selected-keys="['grade']"
+                  @click="sortOrderChange">
+            <template v-for="item in sortOrderList">
+              <a-menu-item v-if="!item.children" :key="item.key">
+                <a-icon type="mail"/>
+                <span>{{item.title}}</span>
+              </a-menu-item>
+              <a-sub-menu v-else :key="item.key">
+                <span slot="title"><a-icon type="mail"/><span>{{item.title}}</span></span>
+                <a-menu-item v-for="i in item.children" :key="i.key">
+                  {{i.title}}
+                </a-menu-item>
+              </a-sub-menu>
+            </template>
+          </a-menu>
+        </a-layout-header>
+        <a-layout-content style="min-width: 800px">
+          <a-spin :spinning="hotelListLoading">
+            <div class="card-wrapper">
+
+              <div v-if="search">
+                <HotelCard :hotel="item" v-for="item in resultHotel" :key="item.index"
+                           @click.native="jumpToDetails(item.id)"></HotelCard>
+                <div v-for="item in emptyBox" :key="item.name"
+                     class="emptyBox ant-col-xs-7 ant-col-lg-5 ant-col-xxl-3">
+                </div>
+              </div>
+              <div v-else>
+                <HotelCard :hotel="item" v-for="item in hotelList" :key="item.index"
+                           @click.native="jumpToDetails(item.id)"></HotelCard>
+                <div v-for="item in emptyBox" :key="item.name"
+                     class="emptyBox ant-col-xs-7 ant-col-lg-5 ant-col-xxl-3">
+                </div>
+              </div>
+            </div>
+          </a-spin>
+        </a-layout-content>
+        <a-layout-footer>
+          <a-divider style="color: rgb(140,140,140); font-weight: lighter">没有更多酒店了</a-divider>
+          <!--            <a-pagination showQuickJumper :total="hotelList.totalElements" :defaultCurrent="1"-->
+          <!--                          @change="pageChange"></a-pagination>-->
+        </a-layout-footer>
+      </a-layout>
+    </div>
   </div>
 </template>
 
@@ -257,12 +300,15 @@
 <style scoped>
 
 .list-search-container {
+  position: sticky;
+  top: 0px;
   width: 100%;
   margin-top: 30px;
   background: #fff;
   box-shadow: 0 8px 20px 0 rgb(97 121 157 / 16%);
   box-sizing: border-box;
   padding: 24px;
+  z-index:100;
 }
 .inner-wrap{
   margin-left: 5%;
@@ -309,19 +355,10 @@
   cursor: pointer;
   border: 1px solid transparent;
 }
-/*.list-search-container .ul {*/
-/*  max-width: 1160px;*/
-/*}*/
-/*.list-search-container .ul {*/
-/*  margin: 0 auto;*/
-/*  list-style: none;*/
-/*  box-sizing: border-box;*/
-/*}*/
-/*.list-search-container .list-destination {*/
-/*  width: 270px;*/
-/*  border: none;*/
-/*}*/
-/*.list-search-container .list-item {*/
-/*  height: 76px;*/
-/*}*/
+
+
+   .box-active{
+     position: fixed;
+     top: 0;
+   }
 </style>
