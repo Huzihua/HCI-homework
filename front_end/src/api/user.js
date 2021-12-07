@@ -3,7 +3,7 @@ import {message} from "ant-design-vue";
 
 const api = {
     userPre: '/api/user'
-}
+};
 export function loginAPI(data){
     return axios({
         url:`${api.userPre}/login`,

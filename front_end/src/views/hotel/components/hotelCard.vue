@@ -89,6 +89,7 @@
 <style scoped lang="less">
   .hotelCard {
     margin: 10px 22px 10px 22px;
+    /*min-width: 45%;*/
     min-width: 600px;
     max-height: 250px;
 

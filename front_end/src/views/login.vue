@@ -21,14 +21,11 @@
               :activeKey="customActiveKey"
               :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
               @change="handleTabClick"
+              v-if="!isToRetrieve"
       >
         <a-tab-pane key="tab1" tab="登录">
           <a-form-item>
-            <a-input
-                    size="large"
-                    type="text"
-                    placeholder="邮箱"
-
+            <a-input size="large" type="text" placeholder="邮箱"
                     v-decorator="[
                 'username',
                 {rules: [{ required: true, message: '请输入邮箱地址' }], validateTrigger: 'blur'}
@@ -39,11 +36,7 @@
           </a-form-item>
 
           <a-form-item>
-            <a-input-password
-                    size="large"
-                    type="password"
-                    autocomplete="false"
-                    placeholder="密码"
+            <a-input-password size="large" type="password" autocomplete="false" placeholder="密码"
                     v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -59,7 +52,6 @@
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
 
-
               <div class="login-code" @click="refreshCode">
                 <!--验证码组件-->
                 <s-identify :identifyCode="identifyCode"></s-identify>
@@ -68,22 +60,14 @@
 
           </a-form-item>
           <a-form-item style="margin-top:24px">
-            <a-button
-                    size="large"
-                    type="primary"
-                    class="login-button"
-                    :loading="loginLoading"
+            <a-button size="large" type="primary" class="login-button" :loading="loginLoading"
                     @click="handlelogin()"
             >确定
             </a-button>
           </a-form-item>
 
           <!--加验证码登录和忘记密码功能-->
-          <a-button
-                  type="link"
-                  class="code-login-button"
-                  style="float:left;"
-                  :disabled="codeloginDisabled"
+          <a-button type="link" class="code-login-button" style="float:left;" :disabled="codeloginDisabled"
                   v-on:click="handleCodeLogin"
           >邮箱验证码登录
           </a-button>
@@ -92,7 +76,7 @@
                   type="link"
                   class="forget-passwd-button"
                   style="float:right;"
-                  v-on:click="handleForgetPasswd"
+                  v-on:click="handleForgetPassword"
           >忘记密码
           </a-button>
 
@@ -110,30 +94,18 @@
           </a-form-item>
 
           <a-form-item>
-
-            <a-input
-                    size="large"
-                    type="email"
-                    placeholder="邮箱"
-                    v-decorator="[
+            <a-input size="large" type="email" placeholder="邮箱"
+                     v-decorator="[
               'registerUserMail',
               {rules: [{ required: true, type: 'email', message: '请输入正确的邮箱' }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-
             </a-input>
-
-
           </a-form-item>
 
           <a-form-item>
             <div class="form-group" style="display: flex;">
-              <a-input
-
-                      size="large"
-                      type="code"
-                      placeholder="邮件验证码"
-
-                      v-decorator="[
+              <a-input size="large" type="code" placeholder="邮件验证码"
+                       v-decorator="[
               'registerCode',
               {rules: [{ required: true, type: 'book', message: '验证码错误或已过期' }], validateTrigger: 'blur'}]">
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -145,67 +117,16 @@
             </div>
           </a-form-item>
 
-
-          <!--新增性别-->
-          <!--          <a-form-item>-->
-          <!--            <a-select-->
-          <!--                    size="large"-->
-          <!--                    placeholder="性别"-->
-          <!--                    v-decorator="[-->
-          <!--              'registerSexType',-->
-          <!--              {rules: [{ required: true, message: '请选择您的性别' }], validateTrigger: 'blur'}]">-->
-          <!--              <a-select-option v-for="item in sex" :key="item" :value="item">{{item}}</a-select-option>-->
-          <!--            </a-select>-->
-          <!--          </a-form-item>-->
-
-          <!-- 身份证号码-->
-          <!--          <a-form-item>-->
-          <!--            <a-input-->
-          <!--                    size="large"-->
-          <!--                    placeholder="身份证号码"-->
-          <!--                    v-decorator="[-->
-          <!--              'registerIdNumber',-->
-          <!--              {rules: [{ required: true, message: '请输入您的身份证号码' },{ validator: this.handleidNumber }], validateTrigger:'blur'}]">-->
-          <!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
-          <!--            </a-input>-->
-          <!--          </a-form-item>-->
-          <!--新增出生日期-->
-          <!--          <a-form-item>-->
-          <!--            <a-date-picker-->
-          <!--                    style="width: 100%"-->
-          <!--                    size="large"-->
-          <!--                    placeholder="出生日期"-->
-          <!--                    v-decorator="[-->
-          <!--              'registerBirth_date']">-->
-          <!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
-          <!--            </a-date-picker>-->
-          <!--          </a-form-item>-->
-
-          <!--           <a-form-item>-->
-          <!--            <a-input-->
-          <!--              size="large"-->
-          <!--              placeholder="手机号"-->
-          <!--              maxlength=11-->
-          <!--              v-decorator="[-->
-          <!--              'registerPhoneNumber', -->
-          <!--              {rules: [{ required: true, message: '请输入手机号' }, { validator: this.handlePhoneNumber }], validateTrigger: 'blur'}]">-->
-          <!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
-          <!--            </a-input>-->
-          <!--          </a-form-item>-->
-          <a-form-item>
-            <a-input-password
-                    size="large"
-                    type="password"
-                    placeholder="密码"
-                    v-decorator="[
+          <a-form-item style="margin-bottom: 8px">
+            <a-input-password size="large" type="password" placeholder="密码"
+                              v-decorator="[
                 'registerPassword',
                 {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePassword }]}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input-password>
           </a-form-item>
 
-
-          <div class='input_span'>
+          <div class='input_span' style="margin-left: 14px">
             <label>密码强度:</label>
             <span id="one"></span>
             <span id="two"></span>
@@ -217,30 +138,101 @@
             <span>强</span>
           </div>
 
-
           <a-form-item>
-            <a-input-password
-                    size="large"
-                    type="password"
-                    placeholder="确认密码"
-                    v-decorator="[
+            <a-input-password size="large" type="password" placeholder="确认密码"
+                              v-decorator="[
                 'registerPasswordconfirm',
                 {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePasswordCheck }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input-password>
           </a-form-item>
+
           <a-form-item style="margin-top:24px">
-            <a-button
-                    size="large"
-                    type="primary"
-                    class="login-button"
-                    :loading="registerLoading"
-                    @click="handleRegister()"
-            >确定
+            <a-button size="large" type="primary" class="login-button" :loading="registerLoading"
+                      @click="handleRegister()">
+              确定
             </a-button>
           </a-form-item>
         </a-tab-pane>
       </a-tabs>
+
+      <div v-else>
+        <a-steps :current="retrieveStep" size="small">
+          <a-step title="邮箱验证"/>
+          <a-step title="设置新密码"/>
+          <a-step title="完成"/>
+        </a-steps>
+
+        <!-- 找回密码第一步，邮箱验证 -->
+        <div v-if="retrieveStep === 0">
+          <a-form-item>
+            <a-input size="large" type="email" placeholder="邮箱" style="margin-top: 55px"
+                     v-decorator="[
+              'registerUserMail',
+              {rules: [{ required: true, type: 'email', message: '请输入正确的邮箱' }], validateTrigger: 'blur'}]">
+              <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input>
+          </a-form-item>
+
+          <a-form-item>
+            <div class="form-group" style="display: flex">
+              <a-input size="large" type="code" placeholder="邮件验证码"
+                       v-decorator="[
+              'registerCode',
+              {rules: [{ required: true, type: 'book', message: '验证码错误或已过期' }], validateTrigger: 'blur'}]">
+                <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              </a-input>
+              <div>
+                <a-button size="large" @click="sendcode" v-if="issend">获取验证码</a-button>
+                <a-button size="large" v-if="!issend" disabled type="primary">{{ count }}s后可再次发送</a-button>
+              </div>
+            </div>
+          </a-form-item>
+
+          <a-form-item>
+            <a-button style="width: 47%; margin-top: 30px" v-on:click="cancelRetrieve" type="danger">取消</a-button>
+            <a-button style="width: 47%; margin-top: 30px; float: right" v-on:click="nextStep" type="primary">
+              下一步
+            </a-button>
+          </a-form-item>
+        </div>
+
+        <!-- 找回密码第二步，设置新密码 -->
+        <div v-else-if="retrieveStep === 1">
+          <a-form-item>
+            <a-input-password size="large" type="password" placeholder="密码" style="margin-top: 55px"
+                              v-decorator="[
+                'registerPassword',
+                {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePassword }]}]">
+              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input-password>
+          </a-form-item>
+
+          <a-form-item>
+            <a-input-password size="large" type="password" placeholder="确认密码"
+                              v-decorator="[
+                'registerPasswordconfirm',
+                {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePasswordCheck }], validateTrigger: 'blur'}]">
+              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input-password>
+          </a-form-item>
+
+          <a-form-item>
+            <a-button style="width: 47%; margin-top: 30px" v-on:click="cancelRetrieve" type="danger">取消</a-button>
+            <a-button style="width: 47%; margin-top: 30px; float: right" v-on:click="nextStep" type="primary">
+              下一步
+            </a-button>
+          </a-form-item>
+        </div>
+
+        <!-- 找回密码第三步，完成 -->
+        <div v-else-if="retrieveStep === 2">
+          <a-result status="success" sub-title="密码重置成功"></a-result>
+          <a-button style="width: 47%; margin: auto; display: block" v-on:click="finishRetrieve" type="primary">完成
+          </a-button>
+        </div>
+      </div>
+
     </a-form>
 
   </div>
@@ -274,7 +266,9 @@
         identifyCode: "",
         code: "",//text框输入的验证码
         count: 60,
-        issend: true
+        issend: true,
+        isToRetrieve: false,
+        retrieveStep: 0
       }
     },
     computed: {
@@ -371,10 +365,10 @@
 
       handlePhoneNumber(rule, value, callback) {
         //为了值是空的时候和“请输入手机号”两个提示同时出现
-        if (value.length == 0) {
+        if (value.length === 0) {
           callback()
         }
-        const regex = /^1[0-9]{10}$/
+        const regex = /^1[0-9]{10}$/;
         if (regex.test(value)) {
           if (value.length !== 11) {
             callback(new Error('请输入正确的手机号码'))
@@ -394,8 +388,8 @@
       },
 
       handleUsernameOrEmail(rule, value, callback) {
-        const {state} = this
-        const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
+        const {state} = this;
+        const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
         if (regex.test(value)) {
           callback()
         } else {
@@ -408,7 +402,7 @@
         // if (value === ''){
         //   callback(new Error('请选择出生日期'))
         // }
-        value = "null"
+        value = "null";
         callback();
       },
       handlePassword(rule, value, callback) {
@@ -416,17 +410,17 @@
           callback(new Error('密码长度应是6-18位'))
         }
         this.msgText = this.checkStrong(value);
-        if (this.msgText > 1 || this.msgText == 1) {
+        if (this.msgText > 1 || this.msgText === 1) {
           document.getElementById("one").style.background = "red";
         } else {
           document.getElementById("one").style.background = "#eee";
         }
-        if (this.msgText > 2 || this.msgText == 2) {
+        if (this.msgText > 2 || this.msgText === 2) {
           document.getElementById("two").style.background = "orange";
         } else {
           document.getElementById("two").style.background = "#eee";
         }
-        if (this.msgText == 4) {
+        if (this.msgText === 4) {
           document.getElementById("three").style.background = "#00D1B2";
         } else {
           document.getElementById("three").style.background = "#eee";
@@ -434,8 +428,8 @@
         callback()
       },
       handlePasswordCheck(rule, value, callback) {
-        const password = this.form.getFieldValue('registerPassword')
-        console.log(password)
+        const password = this.form.getFieldValue('registerPassword');
+        console.log(password);
         if (value === undefined) {
           callback(new Error('请输入密码'))
         }
@@ -464,7 +458,6 @@
               this.loginLoading = false;
               return;
             }
-
             const data = {
               email: this.form.getFieldValue("username"),
               password: this.$md5(this.form.getFieldValue("password")).toString().substring(0, 10)
@@ -514,7 +507,7 @@
         });
       },
       sendcode() {
-        if (this.form.getFieldValue('registerUserMail').length == 0) {
+        if (this.form.getFieldValue('registerUserMail').length === 0) {
           this.issend = true;
         }
         const TIME_COUNT = 60;
@@ -523,7 +516,7 @@
           this.issend = false;
           const data = this.form.getFieldValue('registerUserMail');
           console.log(data);
-          this.sendMail(data);
+          // this.sendMail(data);
 
           this.timer = setInterval(() => {
             if (this.count > 0 && this.count <= TIME_COUNT) {
@@ -539,7 +532,28 @@
       handleCodeLogin() {
 
       },
-      handleForgetPasswd() {
+      handleForgetPassword() {
+        this.isToRetrieve = true;
+      },
+      // 取消找回密码
+      cancelRetrieve() {
+        this.isToRetrieve = false;
+        this.retrieveStep = 0;
+      },
+      // 找回密码下一步
+      nextStep() {
+        if (this.retrieveStep === 0) {
+          //todo 判断邮箱验证码是否正确
+          this.retrieveStep = 1;
+        } else if (this.retrieveStep === 1) {
+          //todo 判断密码是否合法
+          this.retrieveStep = 2;
+        }
+      },
+      // 找回密码完成
+      finishRetrieve() {
+        this.isToRetrieve = false;
+        this.retrieveStep = 0;
       }
     }
   }
