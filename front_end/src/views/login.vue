@@ -55,12 +55,13 @@
           </a-form-item>
 
           <a-form-item v-if="isCodeLogin">
-            <div class="form-group"  style="display: flex;">
+            <div class="form-group" style="display: flex;">
               <a-input
-                  :maxLength="4" size="large" type="text" id="code" v-model="code" class="code" placeholder="请输入右侧验证码"
-                  @change="this.handleDynamicCode"
+                      :maxLength="4" size="large" type="text" id="code" v-model="code" class="code"
+                      placeholder="请输入右侧验证码"
+                      @change="this.handleDynamicCode"
               >
-              >
+                >
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
 
@@ -69,17 +70,17 @@
                 <s-identify :identifyCode="identifyCode"></s-identify>
               </div>
             </div>
-            <a-alert message="验证码不能为空" type="error" v-if="NoneVarifyCode " />
-            <a-alert message="验证码错误" type="error" v-if="isWrongDynamicCode " />
+            <a-alert message="验证码不能为空" type="error" v-if="NoneVarifyCode "/>
+            <a-alert message="验证码错误" type="error" v-if="isWrongDynamicCode "/>
           </a-form-item>
-            <a-form-item  v-if="!isCodeLogin">
-              <div class="form-group"  style="display: flex;">
-                <a-input
-                    :maxLength="6"
-                    size="large"
-                    type="code"
-                    placeholder="邮件验证码"
-                    v-decorator="[
+          <a-form-item v-if="!isCodeLogin">
+            <div class="form-group" style="display: flex;">
+              <a-input
+                      :maxLength="6"
+                      size="large"
+                      type="code"
+                      placeholder="邮件验证码"
+                      v-decorator="[
               'loginVarifyCode',
               {rules: [{ required: true, type: 'book', message: '验证码错误或已过期' }], validateTrigger: 'blur'}]">
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -134,7 +135,6 @@
           </a-form-item>
 
           <a-form-item>
-
             <a-input
                     size="large"
                     type="email"
@@ -145,14 +145,12 @@
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
 
             </a-input>
-
-
           </a-form-item>
 
           <a-form-item>
             <div class="form-group" style="display: flex;">
               <a-input
-                     :maxLength="6"
+                      :maxLength="6"
                       size="large"
                       type="code"
                       placeholder="邮件验证码"
@@ -169,53 +167,6 @@
             </div>
           </a-form-item>
 
-
-          <!--新增性别-->
-          <!--          <a-form-item>-->
-          <!--            <a-select-->
-          <!--                    size="large"-->
-          <!--                    placeholder="性别"-->
-          <!--                    v-decorator="[-->
-          <!--              'registerSexType',-->
-          <!--              {rules: [{ required: true, message: '请选择您的性别' }], validateTrigger: 'blur'}]">-->
-          <!--              <a-select-option v-for="item in sex" :key="item" :value="item">{{item}}</a-select-option>-->
-          <!--            </a-select>-->
-          <!--          </a-form-item>-->
-
-          <!-- 身份证号码-->
-          <!--          <a-form-item>-->
-          <!--            <a-input-->
-          <!--                    size="large"-->
-          <!--                    placeholder="身份证号码"-->
-          <!--                    v-decorator="[-->
-          <!--              'registerIdNumber',-->
-          <!--              {rules: [{ required: true, message: '请输入您的身份证号码' },{ validator: this.handleidNumber }], validateTrigger:'blur'}]">-->
-          <!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
-          <!--            </a-input>-->
-          <!--          </a-form-item>-->
-          <!--新增出生日期-->
-          <!--          <a-form-item>-->
-          <!--            <a-date-picker-->
-          <!--                    style="width: 100%"-->
-          <!--                    size="large"-->
-          <!--                    placeholder="出生日期"-->
-          <!--                    v-decorator="[-->
-          <!--              'registerBirth_date']">-->
-          <!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
-          <!--            </a-date-picker>-->
-          <!--          </a-form-item>-->
-
-          <!--           <a-form-item>-->
-          <!--            <a-input-->
-          <!--              size="large"-->
-          <!--              placeholder="手机号"-->
-          <!--              maxlength=11-->
-          <!--              v-decorator="[-->
-          <!--              'registerPhoneNumber', -->
-          <!--              {rules: [{ required: true, message: '请输入手机号' }, { validator: this.handlePhoneNumber }], validateTrigger: 'blur'}]">-->
-          <!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
-          <!--            </a-input>-->
-          <!--          </a-form-item>-->
           <a-form-item>
             <a-input-password
                     size="large"
@@ -239,7 +190,6 @@
             <span>中</span>
             <span>强</span>
           </div>
-
 
           <a-form-item>
             <a-input-password
@@ -277,7 +227,7 @@
           <a-form-item>
             <a-input size="large" type="email" placeholder="邮箱" style="margin-top: 55px"
                      v-decorator="[
-              'registerUserMail',
+              'retrieveEmail',
               {rules: [{ required: true, type: 'email', message: '请输入正确的邮箱' }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
@@ -287,13 +237,13 @@
             <div class="form-group" style="display: flex">
               <a-input size="large" type="code" placeholder="邮件验证码"
                        v-decorator="[
-              'registerCode',
+              'retrieveCode',
               {rules: [{ required: true, type: 'book', message: '验证码错误或已过期' }], validateTrigger: 'blur'}]">
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
               <div>
-                <a-button size="large" @click="sendcode" v-if="issend">获取验证码</a-button>
-                <a-button size="large" v-if="!issend" disabled type="primary">{{ count }}s后可再次发送</a-button>
+                <a-button size="large" @click="sendRetrieveCode" v-if="issendRetrieve">获取验证码</a-button>
+                <a-button size="large" v-if="!issendRetrieve" disabled type="primary">{{ countRetrieve }}s后可再次发送</a-button>
               </div>
             </div>
           </a-form-item>
@@ -374,16 +324,18 @@
         identifyCodes: "1234567890",
         identifyCode: "",
         code: "",//text框输入的验证码
-        count: 60,
-        countLogin:60,
+        count: 60,            // 注册时 邮箱验证码倒计时
+        countLogin: 60,       // 登录时 邮箱验证码倒计时
+        countRetrieve: 60,    // 找密码时 邮箱验证码倒计时
         issend: true,
         isToRetrieve: false,
         retrieveStep: 0,
         issendLogin: true,
+        issendRetrieve: true,
         isCodeLogin: true,
         textLoginWay: "邮箱验证码登录",
-        NoneVarifyCode:false,
-        isWrongDynamicCode:false,
+        NoneVarifyCode: false,
+        isWrongDynamicCode: false,
       }
     },
     computed: {
@@ -447,14 +399,6 @@
         console.log(this.identifyCode);
       },
 
-      handleidNumber(rule, value, callback) {
-        value = "null";
-        // if (value.length !== 18) {
-        //   callback(new Error('身份证号码是18位'))
-        // }
-        callback()
-      },
-
       checkStrong(sValue) {
         var modes = 0;
         //正则表达式验证符合要求的
@@ -494,31 +438,6 @@
         }
 
         callback()
-      },
-      handlesexType(rule, value, callback) {
-        value = "null"
-        // if (value !== '男'&&value !== '女') {
-        //   callback(new Error('请输入男或女'))
-        // }
-      },
-
-      handleUsernameOrEmail(rule, value, callback) {
-        const {state} = this;
-        const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
-        if (regex.test(value)) {
-          callback()
-        } else {
-          callback(new Error('请输入有效用户名或邮箱'))
-        }
-        callback()
-      },
-
-      handleBirthDate(rule, value, callback) {
-        // if (value === ''){
-        //   callback(new Error('请选择出生日期'))
-        // }
-        value = "null";
-        callback();
       },
       handlePassword(rule, value, callback) {
         if (value.length < 6 || value.length > 18) {
@@ -565,13 +484,13 @@
 
             if (this.code === "" && this.isCodeLogin) {
               this.loginLoading = false;
-              this.NoneVarifyCode=true;
+              this.NoneVarifyCode = true;
               return;
             }
             if (this.identifyCode !== this.code && this.isCodeLogin) {
               this.code = "";
               this.refreshCode();
-              this.isWrongDynamicCode=true;
+              this.isWrongDynamicCode = true;
               this.loginLoading = false;
               return;
             }
@@ -582,7 +501,7 @@
             const data = {
               email: this.form.getFieldValue("username"),
               password: this.$md5(passwd).toString().substring(0, 10),
-              loginVarifyCode:this.form.getFieldValue('loginVarifyCode')
+              loginVarifyCode: this.form.getFieldValue('loginVarifyCode')
             };
             console.log(this.form.getFieldValue('loginVarifyCode'))
             await this.login(data);
@@ -623,9 +542,9 @@
                 'registerUsername': ''
               })
             })
-            .catch((result)=>{
-              this.registerLoading=false;
-            });
+              .catch((result) => {
+                this.registerLoading = false;
+              });
 
           }
         });
@@ -654,8 +573,8 @@
         }
       },
       sendLogincode() {
-        console.log(this.form.getFieldValue('username'))
-        if (this.form.getFieldValue('username').length == 0) {
+        console.log(this.form.getFieldValue('username'));
+        if (this.form.getFieldValue('username').length === 0) {
           this.issendLogin = true;
         }
         const TIME_COUNT = 60;
@@ -677,8 +596,32 @@
           }, 1000);
         }
       },
+      sendRetrieveCode() {
+        console.log(this.form.getFieldValue('retrieveEmail'));
+        if (this.form.getFieldValue('retrieveEmail').length === 0) {
+          this.issendRetrieve = true;
+        }
+        const TIME_COUNT = 60;
+        if (!this.timer) {
+          this.countRetrieve = TIME_COUNT;
+          this.issendRetrieve = false;
+          const data = this.form.getFieldValue('retrieveEmail');
+          console.log(data);
+          this.sendMail(data);
+
+          this.timer = setInterval(() => {
+            if (this.countRetrieve > 0 && this.countRetrieve <= TIME_COUNT) {
+              this.countRetrieve--;
+            } else {
+              this.issendRetrieve = true;
+              clearInterval(this.timer);
+              this.timer = null;
+            }
+          }, 1000);
+        }
+      },
       handleCodeLogin() {
-          this.isCodeLogin=!this.isCodeLogin;
+        this.isCodeLogin = !this.isCodeLogin;
       },
       handleForgetPassword() {
         this.isToRetrieve = true;
@@ -703,16 +646,16 @@
         this.isToRetrieve = false;
         this.retrieveStep = 0;
       },
-      handleDynamicCode(){
-        if(this.code.length>0){
-          this.NoneVarifyCode=false;
-          this.isWrongDynamicCode=false;
+      handleDynamicCode() {
+        if (this.code.length > 0) {
+          this.NoneVarifyCode = false;
+          this.isWrongDynamicCode = false;
         }
         // if(this.code.length>4){
         //   this.code=this.code.substr(0,4)
         // }
       },
-      handleEmailCodeLength(){
+      handleEmailCodeLength() {
 
       }
     }
