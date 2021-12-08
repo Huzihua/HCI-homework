@@ -29,16 +29,6 @@ public class AccountController {
 
     }
 
-//    @PostMapping("/loginWithCode")
-//    public ResponseVO login(@RequestBody UserVO uservo) {
-//        User user = accountService.loginWithCode(uservo);
-//        if (user == null) {
-//            return ResponseVO.buildFailure("用户不存在或验证码错误");
-//        }
-//        return ResponseVO.buildSuccess(user);
-//
-//    }
-
     @PostMapping("/register")
     public ResponseVO registerAccount(@RequestBody UserVO userVO) {
         userVO.setBirth_date("未填写");
@@ -70,6 +60,7 @@ public class AccountController {
         return accountService.updateUserInfo(id,userInfoVO.getPassword(),userInfoVO.getUserName(),userInfoVO.getPhoneNumber(),userInfoVO.getEmail(),userInfoVO.getBirth_date());
 
     }
+
     @PostMapping("/{userEmail}/{amount}/userInfo/addCredit")
     public ResponseVO addCreditForUser(@PathVariable String userEmail, @PathVariable double amount) {
         return accountService.addCreditForUser(userEmail,amount);
@@ -78,4 +69,21 @@ public class AccountController {
     public ResponseVO retrieveUserCreditRecords(@PathVariable int userId) {
         return ResponseVO.buildSuccess(accountService.getUserCreditRecords(userId));
     }
+
+    //检验验证码是否正确，用于重置密码
+    @PostMapping("/checkoutVarifyCode")
+    public ResponseVO checkoutVarifyCode(@RequestBody UserForm userForm){
+        System.out.println(userForm.getEmail());
+        System.out.println(userForm.getLoginVarifyCode());
+        return accountService.checkoutVarifyCode(userForm);
+    }
+    //重置密码
+    @PostMapping("/changePasswd")
+    public ResponseVO changePasswd(@RequestBody UserForm userForm){
+        System.out.println(userForm.getEmail());
+        System.out.println(userForm.getPassword());
+        return accountService.changePasswd(userForm);
+    }
+
+
 }

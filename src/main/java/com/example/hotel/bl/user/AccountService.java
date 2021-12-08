@@ -81,5 +81,17 @@ public interface AccountService {
      */
     List<CreditRecord> getUserCreditRecords(int userid);
 
+    /**
+     * 校验验证码是否正确
+     * @param userForm
+     * @return
+     */
+    ResponseVO checkoutVarifyCode(UserForm userForm);
 
+    /**
+     * 用户重置密码
+     * @param userForm
+     * @return
+     */
+    ResponseVO changePasswd(UserForm userForm);
 }
