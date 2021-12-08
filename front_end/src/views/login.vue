@@ -235,7 +235,7 @@
 
           <a-form-item>
             <div class="form-group" style="display: flex">
-              <a-input size="large" type="code" placeholder="邮件验证码"
+              <a-input size="large" type="code" placeholder="邮件验证码" :maxLength="6"
                        v-decorator="[
               'retrieveCode',
               {rules: [{ required: true, type: 'book', message: '验证码错误或已过期' }], validateTrigger: 'blur'}]">
@@ -260,19 +260,31 @@
         <!-- 找回密码第二步，设置新密码 -->
         <div v-else-if="retrieveStep === 1">
           <a-form-item>
-            <a-input-password size="large" type="password" placeholder="密码" style="margin-top: 55px"
+            <a-input-password size="large" type="password" placeholder="新密码" style="margin-top: 55px"
                               v-decorator="[
                 'retrievePassword',
-                {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePassword }]}]">
+                {rules: [{ required: true, message: '请输入新密码' }, { validator: this.handleRetrievePassword }]}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input-password>
           </a-form-item>
+
+          <div class='input_span' style="margin-left: 14px">
+            <label>密码强度:</label>
+            <span id="four"></span>
+            <span id="five"></span>
+            <span id="six"></span>
+          </div>
+          <div id="font2">
+            <span>弱</span>
+            <span>中</span>
+            <span>强</span>
+          </div>
 
           <a-form-item>
             <a-input-password size="large" type="password" placeholder="确认密码"
                               v-decorator="[
                 'retrievePasswordconfirm',
-                {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePasswordCheck }], validateTrigger: 'blur'}]">
+                {rules: [{ required: true, message: '请输入密码' }, { validator: this.handleRetrievePasswordCheck }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input-password>
           </a-form-item>
@@ -336,7 +348,8 @@
         textLoginWay: "邮箱验证码登录",
         NoneVarifyCode: false,
         isWrongDynamicCode: false,
-        retrieveEmail: ''
+        retrieveEmail: '',
+        differntRetrievePasswd:true,
       }
     },
     computed: {
@@ -477,6 +490,44 @@
         callback()
       },
 
+      handleRetrievePassword(rule, value, callback) {
+        if (value.length < 6 || value.length > 18) {
+          callback(new Error('密码长度应是6-18位'))
+        }
+        this.msgText = this.checkStrong(value);
+        if (this.msgText > 1 || this.msgText === 1) {
+          document.getElementById("four").style.background = "red";
+        } else {
+          document.getElementById("four").style.background = "#eee";
+        }
+        if (this.msgText > 2 || this.msgText === 2) {
+          document.getElementById("five").style.background = "orange";
+        } else {
+          document.getElementById("five").style.background = "#eee";
+        }
+        if (this.msgText === 4) {
+          document.getElementById("six").style.background = "#00D1B2";
+        } else {
+          document.getElementById("six").style.background = "#eee";
+        }
+        callback()
+      },
+
+      handleRetrievePasswordCheck(rule, value, callback) {
+        const retrievePassword = this.form.getFieldValue('retrievePassword');
+        if (value === undefined) {
+          callback(new Error('请输入密码'))
+        }
+        if (value && retrievePassword && value.trim() !== retrievePassword.trim()) {
+          this.differntRetrievePasswd=true;
+          callback(new Error('两次密码不一致'))
+        }
+        if(value.length>=6 && retrievePassword.length>=6 && value.trim() == retrievePassword.trim()) {
+          this.differntRetrievePasswd = false;
+          callback()
+        }
+      },
+
       handleTabClick(key) {
         this.customActiveKey = key
       },
@@ -606,7 +657,7 @@
       },
 
       sendRetrieveCode() {
-        console.log(this.form.getFieldValue('retrieveEmail'));
+
         if (this.form.getFieldValue('retrieveEmail').length === 0) {
           this.issendRetrieve = true;
         }
@@ -617,7 +668,7 @@
           const data = this.form.getFieldValue('retrieveEmail');
           console.log(data);
           this.sendMail(data);
-
+          console.log("0000000");
           this.timer = setInterval(() => {
             if (this.countRetrieve > 0 && this.countRetrieve <= TIME_COUNT) {
               this.countRetrieve--;
@@ -644,7 +695,8 @@
       // 找回密码下一步
       nextStep() {
         console.log('next step', this.retrieveStep);
-        if (this.retrieveStep === 0) {
+        var _this=this
+        if (_this.retrieveStep === 0) {
           this.retrieveEmail = this.form.getFieldValue('retrieveEmail');
           //todo 判断邮箱验证码是否正确
           const data = {
@@ -653,27 +705,30 @@
           };
           console.log(data);
           checkoutVarifyCodeAPI(data).then(function (response) {
-            if (response.success) {
-              this.retrieveStep = 1;
-            } else {
-              message.error('邮箱验证码错误');
+            console.log(response);
+            if (response) {
+              _this.retrieveStep = 1;
             }
           });
-        } else if (this.retrieveStep === 1) {
+        } else if (_this.retrieveStep === 1) {
           //todo 判断密码是否合法
+          console.log(this.differntRetrievePasswd)
+          if(this.differntRetrievePasswd){
+            return;
+          }
           const data = {
             email: this.retrieveEmail,
-            password: this.form.getFieldValue('retrievePasswordconfirm')
+            password: this.$md5(this.form.getFieldValue('retrievePasswordconfirm')).toString().substring(0, 10)
           };
           console.log(data);
           changePasswdAPI(data).then(function (response) {
-            if (response.success) {
-              this.retrieveStep = 2;
+            if (response) {
+              _this.retrieveStep = 2;
             } else {
               message.error('重置密码失败')
             }
           });
-          this.retrieveStep = 2;
+
         }
       },
       // 找回密码完成
@@ -690,9 +745,6 @@
         //   this.code=this.code.substr(0,4)
         // }
       },
-      handleEmailCodeLength() {
-
-      }
     }
   }
 </script>
@@ -834,6 +886,42 @@
   }
 
   #font span:nth-child(3) {
+    color: #00D1B2;
+  }
+
+  #four {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-right: 0px solid;
+    margin-left: 20px;
+    margin-right: 3px;
+  }
+
+  #five {
+    border-left: 0px solid;
+    border-right: 0px solid;
+    margin-left: -5px;
+    margin-right: 3px;
+  }
+
+  #six {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left: 0px solid;
+    margin-left: -5px;
+  }
+
+  #font2 span:nth-child(1) {
+    color: red;
+    margin-left: 120px;
+  }
+
+  #font2 span:nth-child(2) {
+    color: orange;
+    margin: 0 67px;
+  }
+
+  #font2 span:nth-child(3) {
     color: #00D1B2;
   }
 </style>

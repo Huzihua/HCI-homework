@@ -36,6 +36,9 @@ public class AccountServiceImpl implements AccountService {
                 return ResponseVO.buildSuccess(true);
             }
             String codeRedis=stringRedisTemplate.opsForValue().get(userVO.getEmail());
+            if(codeRedis==null){
+                return ResponseVO.buildFailure("验证码错误或已过期");
+            }
             if(!codeRedis.equals(userVO.getRegisterCode()))
             { return ResponseVO.buildFailure("验证码错误或已过期");}
         }catch (Exception e){
@@ -59,6 +62,9 @@ public class AccountServiceImpl implements AccountService {
                 return ResponseVO.buildFailure("用户不存在");
             }
             String codeRedis = stringRedisTemplate.opsForValue().get(userForm.getEmail());
+            if(codeRedis==null){
+                return ResponseVO.buildFailure("验证码错误或已过期");
+            }
             if (codeRedis.equals(userForm.getLoginVarifyCode())) {
                 return ResponseVO.buildSuccess(user);
             }else{
@@ -66,6 +72,7 @@ public class AccountServiceImpl implements AccountService {
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
+
         }
         if (null == user || !user.getPassword().equals(userForm.getPassword())) {
             return ResponseVO.buildFailure("用户名或密码错误");
@@ -183,6 +190,10 @@ public class AccountServiceImpl implements AccountService {
                 return ResponseVO.buildFailure("用户不存在");
             }
             String codeRedis = stringRedisTemplate.opsForValue().get(userForm.getEmail());
+            if(codeRedis==null){
+                return ResponseVO.buildFailure("验证码错误或已过期");
+            }
+            System.out.println("redis:"+codeRedis+" "+userForm.getLoginVarifyCode());
             if (codeRedis.equals(userForm.getLoginVarifyCode())) {
                 return ResponseVO.buildSuccess(true);
             }else{
@@ -191,7 +202,7 @@ public class AccountServiceImpl implements AccountService {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
-        return ResponseVO.buildFailure("账户认证失败");
+        return ResponseVO.buildFailure("验证码错误或已过期");
     }
 
     @Override
