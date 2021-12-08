@@ -86,8 +86,8 @@
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
               <div>
-                <a-button size="large" @click="sendLogincode" v-if="issendLogin">获取验证码</a-button>
-                <a-button size="large" v-if="!issendLogin" disabled type="primary">{{ countLogin }}s后可再次发送</a-button>
+                <a-button size="large"  @click="sendLogincode" type="primary" v-if="issendLogin">获取验证码</a-button>
+                <a-button size="large" v-if="!issendLogin" disabled type="primary">{{ countLogin }}s后重新获取</a-button>
               </div>
             </div>
           </a-form-item>
@@ -161,8 +161,8 @@
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
               <div>
-                <a-button size="large" @click="sendcode" v-if="issend">获取验证码</a-button>
-                <a-button size="large" v-if="!issend" disabled type="primary">{{ count }}s后可再次发送</a-button>
+                <a-button size="large" type="primary" @click="sendcode" v-if="issend">获取验证码</a-button>
+                <a-button size="large" v-if="!issend" disabled type="primary">{{ count }}s后重新获取</a-button>
               </div>
             </div>
           </a-form-item>
@@ -242,8 +242,8 @@
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
               <div>
-                <a-button size="large" @click="sendRetrieveCode" v-if="issendRetrieve">获取验证码</a-button>
-                <a-button size="large" v-if="!issendRetrieve" disabled type="primary">{{ countRetrieve }}s后可再次发送
+                <a-button size="large" type="primary" @click="sendRetrieveCode" v-if="issendRetrieve">获取验证码</a-button>
+                <a-button size="large" v-if="!issendRetrieve" disabled type="primary">{{ countRetrieve }}s后重新获取
                 </a-button>
               </div>
             </div>
@@ -350,6 +350,10 @@
         isWrongDynamicCode: false,
         retrieveEmail: '',
         differntRetrievePasswd:true,
+        pageTimers:{},//计时器数组
+        resgisterTimer:0,//注册的计时器
+        loginWithCodeTimer:1,//登录的计时器
+        forgetPasswdTimer:2,//找回密码的计时器
       }
     },
     computed: {
@@ -612,20 +616,20 @@
           this.issend = true;
         }
         const TIME_COUNT = 60;
-        if (!this.timer) {
+        if (!this.pageTimers[this.resgisterTimer]) {
           this.count = TIME_COUNT;
           this.issend = false;
           const data = this.form.getFieldValue('registerUserMail');
           console.log(data);
           this.sendMail(data);
 
-          this.timer = setInterval(() => {
+          this.pageTimers[this.resgisterTimer] = setInterval(() => {
             if (this.count > 0 && this.count <= TIME_COUNT) {
               this.count--;
             } else {
               this.issend = true;
-              clearInterval(this.timer);
-              this.timer = null;
+              clearInterval(this.pageTimers[this.resgisterTimer]);
+              this.pageTimers[this.resgisterTimer] = null;
             }
           }, 1000);
         }
@@ -637,20 +641,20 @@
           this.issendLogin = true;
         }
         const TIME_COUNT = 60;
-        if (!this.timer) {
+        if (!this.pageTimers[this.loginWithCodeTimer]) {
           this.countLogin = TIME_COUNT;
           this.issendLogin = false;
           const data = this.form.getFieldValue('username');
           console.log(data);
           this.sendMail(data);
 
-          this.timer = setInterval(() => {
+          this.pageTimers[this.loginWithCodeTimer] = setInterval(() => {
             if (this.countLogin > 0 && this.countLogin <= TIME_COUNT) {
               this.countLogin--;
             } else {
               this.issendLogin = true;
-              clearInterval(this.timer);
-              this.timer = null;
+              clearInterval(this.pageTimers[this.loginWithCodeTimer]);
+              this.pageTimers[this.loginWithCodeTimer] = null;
             }
           }, 1000);
         }
@@ -662,20 +666,20 @@
           this.issendRetrieve = true;
         }
         const TIME_COUNT = 60;
-        if (!this.timer) {
+        if (!this.pageTimers[this.forgetPasswdTimer]) {
           this.countRetrieve = TIME_COUNT;
           this.issendRetrieve = false;
           const data = this.form.getFieldValue('retrieveEmail');
           console.log(data);
           this.sendMail(data);
           console.log("0000000");
-          this.timer = setInterval(() => {
+          this.pageTimers[this.forgetPasswdTimer] = setInterval(() => {
             if (this.countRetrieve > 0 && this.countRetrieve <= TIME_COUNT) {
               this.countRetrieve--;
             } else {
               this.issendRetrieve = true;
-              clearInterval(this.timer);
-              this.timer = null;
+              clearInterval(this.pageTimers[this.forgetPasswdTimer]);
+              this.pageTimers[this.forgetPasswdTimer] = null;
             }
           }, 1000);
         }
