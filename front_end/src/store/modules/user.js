@@ -9,7 +9,9 @@ import {
   sendMailAPI,
   getUserInfoAPI,
   updateUserInfoAPI,
-  getUserCreditRecordsAPI
+  getUserCreditRecordsAPI,
+  checkoutVarifyCodeAPI,
+  changePasswdAPI
 } from '@/api/user'
 import {
   getManagerListAPI,
@@ -34,9 +36,8 @@ const getDefaultState = () => {
     userInfo: {},
     userOrderList: [],
     userCreditRecordList: [],
-
   }
-}
+};
 
 const user = {
   state: {
@@ -229,61 +230,61 @@ const user = {
     // remove token
     resetToken({commit}) {
       return new Promise(resolve => {
-        removeToken() // must remove  token  first
-        commit('reset_state')
+        removeToken(); // must remove  token  first
+        commit('reset_state');
         resolve()
       })
     },
     getManagerList: async ({commit}) => {
-      const res = await getManagerListAPI()
+      const res = await getManagerListAPI();
       if (res) {
         commit('set_managerList', res)
       }
     },
     addManager: async ({state, commit, dispatch}) => {
-      const res = await addManagerAPI(state.addManagerParams)
+      const res = await addManagerAPI(state.addManagerParams);
       if (res) {
         commit('set_addManagerParams', {
           email: '',
           password: '',
           userName: '',
           phoneNumber: ''
-        })
+        });
         dispatch('getManagerList')
       } else {
         message.error('添加失败')
       }
     },
     getMarketerList: async ({commit}) => {
-      const res = await getMarketerListAPI()
+      const res = await getMarketerListAPI();
       if (res) {
         commit('set_marketerList', res)
       }
     },
     addMarketer: async ({state, commit, dispatch}) => {
-      const res = await addMarketerAPI(state.addMarketerParams)
+      const res = await addMarketerAPI(state.addMarketerParams);
       if (res) {
         commit('set_addMarketerParams', {
           email: '',
           password: '',
           userName: '',
           phoneNumber: ''
-        })
-        commit('set_addMarketerModalVisible', false)
-        message.success('添加成功')
+        });
+        commit('set_addMarketerModalVisible', false);
+        message.success('添加成功');
         dispatch('getMarketerList')
       } else {
         message.error('添加失败')
       }
     },
     getClientList: async ({commit}) => {
-      const res = await getClientListAPI()
+      const res = await getClientListAPI();
       if (res) {
         commit('set_clientList', res)
       }
     },
     updateClientInfo: async ({state, commit, dispatch}) => {
-      const res = await updateUserInfoAPI(state.userInfo)
+      const res = await updateUserInfoAPI(state.userInfo);
       if (res) {
         // commit('set_userInfo', {
         //     id:0,
@@ -293,28 +294,28 @@ const user = {
         //     type:'',
         //     phone:''
         // })
-        commit('set_updateClientModalVisible', false)
-        message.success('修改客户信息成功')
+        commit('set_updateClientModalVisible', false);
+        message.success('修改客户信息成功');
         dispatch('getClientList')
       } else {
         message.error('修改客户信息失败')
       }
     },
     updateMarketerInfo: async ({state, commit, dispatch}) => {
-      const res = await updateUserInfoAPI(state.userInfo)
+      const res = await updateUserInfoAPI(state.userInfo);
       if (res) {
-        commit('set_updateMarketerModalVisible', false)
-        message.success('修改网站营销人员信息成功')
+        commit('set_updateMarketerModalVisible', false);
+        message.success('修改网站营销人员信息成功');
         dispatch('getMarketerList')
       } else {
         message.error('修改网站营销人员信息失败')
       }
     },
     updateManagerInfo: async ({state, commit, dispatch}) => {
-      const res = await updateUserInfoAPI(state.userInfo)
+      const res = await updateUserInfoAPI(state.userInfo);
       if (res) {
-        commit('set_updateManagerModalVisible', false)
-        message.success('修改酒店经理信息成功')
+        commit('set_updateManagerModalVisible', false);
+        message.success('修改酒店经理信息成功');
         dispatch('getManagerList')
       } else {
         message.error('修改酒店经理信息失败')

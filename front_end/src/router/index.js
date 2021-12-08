@@ -13,11 +13,6 @@ const routes = [
     redirect: '/NJUSE'
   },
   {
-    path: '/retrievePassword',
-    name: 'retrievePassword',
-    component: () => import('../views/retrievePassword')
-  },
-  {
     path: '/NJUSE',
     name: 'layout',
     redirect: '/hotel/hotelList',

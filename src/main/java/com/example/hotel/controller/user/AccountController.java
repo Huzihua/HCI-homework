@@ -78,6 +78,7 @@ public class AccountController {
         System.out.println(userForm.getLoginVarifyCode());
         return accountService.checkoutVarifyCode(userForm);
     }
+
     //重置密码
     @PostMapping("/changePasswd")
     public ResponseVO changePasswd(@RequestBody UserForm userForm){
@@ -85,6 +86,5 @@ public class AccountController {
         System.out.println(userForm.getPassword());
         return accountService.changePasswd(userForm);
     }
-
 
 }

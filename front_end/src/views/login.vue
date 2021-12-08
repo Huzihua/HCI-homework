@@ -243,7 +243,8 @@
               </a-input>
               <div>
                 <a-button size="large" @click="sendRetrieveCode" v-if="issendRetrieve">获取验证码</a-button>
-                <a-button size="large" v-if="!issendRetrieve" disabled type="primary">{{ countRetrieve }}s后可再次发送</a-button>
+                <a-button size="large" v-if="!issendRetrieve" disabled type="primary">{{ countRetrieve }}s后可再次发送
+                </a-button>
               </div>
             </div>
           </a-form-item>
@@ -261,7 +262,7 @@
           <a-form-item>
             <a-input-password size="large" type="password" placeholder="密码" style="margin-top: 55px"
                               v-decorator="[
-                'registerPassword',
+                'retrievePassword',
                 {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePassword }]}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input-password>
@@ -270,7 +271,7 @@
           <a-form-item>
             <a-input-password size="large" type="password" placeholder="确认密码"
                               v-decorator="[
-                'registerPasswordconfirm',
+                'retrievePasswordconfirm',
                 {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePasswordCheck }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input-password>
@@ -299,12 +300,11 @@
 
 <script>
   import {mapGetters, mapActions, mapMutations} from 'vuex'
-  import router from '@/router'
+  import SIdentify from "./user/components/varifyCode";
+  import {changePasswdAPI, checkoutVarifyCodeAPI} from "../api/user";
+  import {message} from 'ant-design-vue'
 
   const moment = require('moment');
-  import SIdentify from "./user/components/varifyCode";
-  import retrievePassword from "./retrievePassword";
-  import Vue from 'vue'
 
   export default {
 
@@ -336,6 +336,7 @@
         textLoginWay: "邮箱验证码登录",
         NoneVarifyCode: false,
         isWrongDynamicCode: false,
+        retrieveEmail: ''
       }
     },
     computed: {
@@ -346,12 +347,12 @@
     },
     mounted() {
       this.refreshCode();
-      this.checkAllOrders()
+      this.checkAllOrders();
     },
     watch: {
       $route: {
         handler: function (route) {
-          this.redirect = route.query && route.query.redirect
+          this.redirect = route.query && route.query.redirect;
         },
         immediate: true
       },
@@ -369,17 +370,17 @@
         this.identifyCode = "";
         this.makeCode(this.identifyCodes, 4);
       },
+
       created() {     //新增
         this.refreshCode()
       },
+
       // changeUserType(event){
       //   if(event==1){this.userType="普通用户"}
       //   else if(event==2){this.userType="酒店工作人员"}
       //   else if(event==3){this.userType="网站管理人员"}
       //   else{this.userType="网站营销人员"}
       // },
-
-      // handler
 
       //验证码
       randomNum(min, max) {
@@ -390,6 +391,7 @@
         this.identifyCode = "";
         this.makeCode(this.identifyCodes, 4);
       },
+
       makeCode(o, l) {
         for (let i = 0; i < l; i++) {
           this.identifyCode += this.identifyCodes[
@@ -439,6 +441,7 @@
 
         callback()
       },
+
       handlePassword(rule, value, callback) {
         if (value.length < 6 || value.length > 18) {
           callback(new Error('密码长度应是6-18位'))
@@ -461,6 +464,7 @@
         }
         callback()
       },
+
       handlePasswordCheck(rule, value, callback) {
         const password = this.form.getFieldValue('registerPassword');
         console.log(password);
@@ -472,11 +476,12 @@
         }
         callback()
       },
+
       handleTabClick(key) {
         this.customActiveKey = key
       },
-      handlelogin() {
 
+      handlelogin() {
         const validateFieldsKey = this.customActiveKey === 'tab1' ? ['username', 'password'] : ['registerUsername', 'registerUserMail', 'registerPassword', 'registerPasswordconfirm']
         this.form.validateFields(validateFieldsKey, {force: true}, async (err, values) => {
           if (!err) {
@@ -503,12 +508,13 @@
               password: this.$md5(passwd).toString().substring(0, 10),
               loginVarifyCode: this.form.getFieldValue('loginVarifyCode')
             };
-            console.log(this.form.getFieldValue('loginVarifyCode'))
+            console.log(this.form.getFieldValue('loginVarifyCode'));
             await this.login(data);
             this.loginLoading = false
           }
         })
       },
+
       handleRegister() {
         const {form: {validateFields}} = this;
         const validateFieldsKey = this.customActiveKey === 'tab1' ? ['username', 'password'] : ['registerUsername', 'registerPhoneNumber', 'registerUserMail', 'registerPassword', 'registerPasswordconfirm']
@@ -549,6 +555,7 @@
           }
         });
       },
+
       sendcode() {
         if (this.form.getFieldValue('registerUserMail').length === 0) {
           this.issend = true;
@@ -572,6 +579,7 @@
           }, 1000);
         }
       },
+
       sendLogincode() {
         console.log(this.form.getFieldValue('username'));
         if (this.form.getFieldValue('username').length === 0) {
@@ -596,6 +604,7 @@
           }, 1000);
         }
       },
+
       sendRetrieveCode() {
         console.log(this.form.getFieldValue('retrieveEmail'));
         if (this.form.getFieldValue('retrieveEmail').length === 0) {
@@ -620,6 +629,7 @@
           }, 1000);
         }
       },
+
       handleCodeLogin() {
         this.isCodeLogin = !this.isCodeLogin;
       },
@@ -633,11 +643,36 @@
       },
       // 找回密码下一步
       nextStep() {
+        console.log('next step', this.retrieveStep);
         if (this.retrieveStep === 0) {
+          this.retrieveEmail = this.form.getFieldValue('retrieveEmail');
           //todo 判断邮箱验证码是否正确
-          this.retrieveStep = 1;
+          const data = {
+            email: this.retrieveEmail,
+            loginVarifyCode: this.form.getFieldValue('retrieveCode')
+          };
+          console.log(data);
+          checkoutVarifyCodeAPI(data).then(function (response) {
+            if (response.success) {
+              this.retrieveStep = 1;
+            } else {
+              message.error('邮箱验证码错误');
+            }
+          });
         } else if (this.retrieveStep === 1) {
           //todo 判断密码是否合法
+          const data = {
+            email: this.retrieveEmail,
+            password: this.form.getFieldValue('retrievePasswordconfirm')
+          };
+          console.log(data);
+          changePasswdAPI(data).then(function (response) {
+            if (response.success) {
+              this.retrieveStep = 2;
+            } else {
+              message.error('重置密码失败')
+            }
+          });
           this.retrieveStep = 2;
         }
       },
