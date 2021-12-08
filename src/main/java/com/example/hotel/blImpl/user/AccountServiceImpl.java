@@ -175,6 +175,38 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.getUserCreditRecords(userid);
     }
 
+    @Override
+    public ResponseVO checkoutVarifyCode(UserForm userForm){
 
+        User user = accountMapper.getAccountByName(userForm.getEmail());
+        try {
+            if(user==null){
+                return ResponseVO.buildFailure("用户不存在");
+            }
+            String codeRedis = stringRedisTemplate.opsForValue().get(userForm.getEmail());
+            if (codeRedis.equals(userForm.getLoginVarifyCode())) {
+                return ResponseVO.buildSuccess(true);
+            }else{
+                return ResponseVO.buildFailure("验证码错误或已过期");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseVO.buildFailure("账户认证失败");
+    }
+
+    @Override
+    public ResponseVO changePasswd(UserForm userForm){
+        try {
+            String mail = userForm.getEmail();
+            User user = accountMapper.getAccountByName(mail);
+            String newPasswd = userForm.getPassword();
+            accountMapper.updateAccount(user.getId(), newPasswd, user.getUserName(), user.getPhoneNumber(), user.getEmail(), user.getBirth_date());
+            return ResponseVO.buildSuccess("重置密码成功");
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return ResponseVO.buildFailure("重置密码失败");
+    }
 }
 
