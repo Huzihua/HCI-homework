@@ -31,7 +31,7 @@
                 {rules: [{ required: true, message: '请输入邮箱地址' }], validateTrigger: 'blur'}
               ]"
             >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
 
