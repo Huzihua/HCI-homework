@@ -25,8 +25,11 @@
       >
         <a-tab-pane key="tab1" tab="登录">
           <a-form-item>
-            <a-input size="large" type="text" placeholder="邮箱"
-                     v-decorator="[
+            <a-input
+                    size="large"
+                    type="text"
+                    placeholder="邮箱"
+                    v-decorator="[
                 'username',
                 {rules: [{ required: true, message: '请输入邮箱地址' }], validateTrigger: 'blur'}
               ]"
@@ -36,8 +39,13 @@
           </a-form-item>
 
           <a-form-item v-if="isCodeLogin">
-            <a-input-password size="large" type="password" autocomplete="false" placeholder="密码"
-                              v-decorator="[
+            <a-input-password
+                    size="large"
+                    type="password"
+
+                    autocomplete="false"
+                    placeholder="密码"
+                    v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
               ]"
@@ -48,7 +56,11 @@
 
           <a-form-item v-if="isCodeLogin">
             <div class="form-group"  style="display: flex;">
-              <a-input size="large" type="text" id="code" v-model="code" class="code" placeholder="请输入您的验证码">
+              <a-input
+                  :maxLength="4" size="large" type="text" id="code" v-model="code" class="code" placeholder="请输入右侧验证码"
+                  @change="this.handleDynamicCode"
+              >
+              >
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
 
@@ -57,36 +69,45 @@
                 <s-identify :identifyCode="identifyCode"></s-identify>
               </div>
             </div>
-
+            <a-alert message="验证码不能为空" type="error" v-if="NoneVarifyCode " />
+            <a-alert message="验证码错误" type="error" v-if="isWrongDynamicCode " />
           </a-form-item>
-
-          <a-form-item v-if="!isCodeLogin">
-            <div class="form-group" style="display: flex;">
-              <a-input
-                      size="large"
-                      type="code"
-                      placeholder="邮件验证码"
-                      v-decorator="[
+            <a-form-item  v-if="!isCodeLogin">
+              <div class="form-group"  style="display: flex;">
+                <a-input
+                    :maxLength="6"
+                    size="large"
+                    type="code"
+                    placeholder="邮件验证码"
+                    v-decorator="[
               'loginVarifyCode',
               {rules: [{ required: true, type: 'book', message: '验证码错误或已过期' }], validateTrigger: 'blur'}]">
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
               <div>
                 <a-button size="large" @click="sendLogincode" v-if="issendLogin">获取验证码</a-button>
-                <a-button size="large" v-if="!issendLogin" disabled type="primary">{{ count }}s后可再次发送</a-button>
+                <a-button size="large" v-if="!issendLogin" disabled type="primary">{{ countLogin }}s后可再次发送</a-button>
               </div>
             </div>
           </a-form-item>
           <a-form-item style="margin-top:24px">
-            <a-button size="large" type="primary" class="login-button" :loading="loginLoading"
-                      @click="handlelogin()"
+            <a-button
+                    size="large"
+                    type="primary"
+                    class="login-button"
+                    :loading="loginLoading"
+                    @click="handlelogin()"
             >确定
             </a-button>
           </a-form-item>
 
           <!--加验证码登录和忘记密码功能-->
-          <a-button type="link" class="code-login-button" style="float:left;" :disabled="codeloginDisabled"
-                    v-on:click="handleCodeLogin"
+          <a-button
+                  type="link"
+                  class="code-login-button"
+                  style="float:left;"
+                  :disabled="codeloginDisabled"
+                  v-on:click="handleCodeLogin"
           ><span v-if="isCodeLogin">邮箱验证码登录</span>
             <span v-if="!isCodeLogin">密码登录</span>
           </a-button>
@@ -113,18 +134,30 @@
           </a-form-item>
 
           <a-form-item>
-            <a-input size="large" type="email" placeholder="邮箱"
-                     v-decorator="[
+
+            <a-input
+                    size="large"
+                    type="email"
+                    placeholder="邮箱"
+                    v-decorator="[
               'registerUserMail',
               {rules: [{ required: true, type: 'email', message: '请输入正确的邮箱' }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+
             </a-input>
+
+
           </a-form-item>
 
           <a-form-item>
             <div class="form-group" style="display: flex;">
-              <a-input size="large" type="code" placeholder="邮件验证码"
-                       v-decorator="[
+              <a-input
+                     :maxLength="6"
+                      size="large"
+                      type="code"
+                      placeholder="邮件验证码"
+
+                      v-decorator="[
               'registerCode',
               {rules: [{ required: true, type: 'book', message: '验证码错误或已过期' }], validateTrigger: 'blur'}]">
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -136,9 +169,59 @@
             </div>
           </a-form-item>
 
-          <a-form-item style="margin-bottom: 8px">
-            <a-input-password size="large" type="password" placeholder="密码"
-                              v-decorator="[
+
+          <!--新增性别-->
+          <!--          <a-form-item>-->
+          <!--            <a-select-->
+          <!--                    size="large"-->
+          <!--                    placeholder="性别"-->
+          <!--                    v-decorator="[-->
+          <!--              'registerSexType',-->
+          <!--              {rules: [{ required: true, message: '请选择您的性别' }], validateTrigger: 'blur'}]">-->
+          <!--              <a-select-option v-for="item in sex" :key="item" :value="item">{{item}}</a-select-option>-->
+          <!--            </a-select>-->
+          <!--          </a-form-item>-->
+
+          <!-- 身份证号码-->
+          <!--          <a-form-item>-->
+          <!--            <a-input-->
+          <!--                    size="large"-->
+          <!--                    placeholder="身份证号码"-->
+          <!--                    v-decorator="[-->
+          <!--              'registerIdNumber',-->
+          <!--              {rules: [{ required: true, message: '请输入您的身份证号码' },{ validator: this.handleidNumber }], validateTrigger:'blur'}]">-->
+          <!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+          <!--            </a-input>-->
+          <!--          </a-form-item>-->
+          <!--新增出生日期-->
+          <!--          <a-form-item>-->
+          <!--            <a-date-picker-->
+          <!--                    style="width: 100%"-->
+          <!--                    size="large"-->
+          <!--                    placeholder="出生日期"-->
+          <!--                    v-decorator="[-->
+          <!--              'registerBirth_date']">-->
+          <!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+          <!--            </a-date-picker>-->
+          <!--          </a-form-item>-->
+
+          <!--           <a-form-item>-->
+          <!--            <a-input-->
+          <!--              size="large"-->
+          <!--              placeholder="手机号"-->
+          <!--              maxlength=11-->
+          <!--              v-decorator="[-->
+          <!--              'registerPhoneNumber', -->
+          <!--              {rules: [{ required: true, message: '请输入手机号' }, { validator: this.handlePhoneNumber }], validateTrigger: 'blur'}]">-->
+          <!--              <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+          <!--            </a-input>-->
+          <!--          </a-form-item>-->
+          <a-form-item>
+            <a-input-password
+                    size="large"
+                    type="password"
+                    placeholder="密码"
+                    v-decorator="[
                 'registerPassword',
                 {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePassword }]}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -157,19 +240,26 @@
             <span>强</span>
           </div>
 
+
           <a-form-item>
-            <a-input-password size="large" type="password" placeholder="确认密码"
-                              v-decorator="[
+            <a-input-password
+                    size="large"
+                    type="password"
+                    placeholder="确认密码"
+                    v-decorator="[
                 'registerPasswordconfirm',
                 {rules: [{ required: true, message: '请输入密码' }, { validator: this.handlePasswordCheck }], validateTrigger: 'blur'}]">
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input-password>
           </a-form-item>
-
           <a-form-item style="margin-top:24px">
-            <a-button size="large" type="primary" class="login-button" :loading="registerLoading"
-                      @click="handleRegister()">
-              确定
+            <a-button
+                    size="large"
+                    type="primary"
+                    class="login-button"
+                    :loading="registerLoading"
+                    @click="handleRegister()"
+            >确定
             </a-button>
           </a-form-item>
         </a-tab-pane>
@@ -285,13 +375,15 @@
         identifyCode: "",
         code: "",//text框输入的验证码
         count: 60,
+        countLogin:60,
         issend: true,
         isToRetrieve: false,
         retrieveStep: 0,
-        countLogin: 60,
         issendLogin: true,
         isCodeLogin: true,
-        textLoginWay: "邮箱验证码登录"
+        textLoginWay: "邮箱验证码登录",
+        NoneVarifyCode:false,
+        isWrongDynamicCode:false,
       }
     },
     computed: {
@@ -465,19 +557,21 @@
         this.customActiveKey = key
       },
       handlelogin() {
+
         const validateFieldsKey = this.customActiveKey === 'tab1' ? ['username', 'password'] : ['registerUsername', 'registerUserMail', 'registerPassword', 'registerPasswordconfirm']
         this.form.validateFields(validateFieldsKey, {force: true}, async (err, values) => {
           if (!err) {
             this.loginLoading = true;
+
             if (this.code === "" && this.isCodeLogin) {
-              alert("验证码不能为空！");
               this.loginLoading = false;
+              this.NoneVarifyCode=true;
               return;
             }
             if (this.identifyCode !== this.code && this.isCodeLogin) {
               this.code = "";
               this.refreshCode();
-              alert("请输入正确的验证码！");
+              this.isWrongDynamicCode=true;
               this.loginLoading = false;
               return;
             }
@@ -488,15 +582,14 @@
             const data = {
               email: this.form.getFieldValue("username"),
               password: this.$md5(passwd).toString().substring(0, 10),
-              loginVarifyCode: this.form.getFieldValue('loginVarifyCode')
+              loginVarifyCode:this.form.getFieldValue('loginVarifyCode')
             };
-            console.log(this.form.getFieldValue('loginVarifyCode'));
+            console.log(this.form.getFieldValue('loginVarifyCode'))
             await this.login(data);
             this.loginLoading = false
           }
         })
       },
-
       handleRegister() {
         const {form: {validateFields}} = this;
         const validateFieldsKey = this.customActiveKey === 'tab1' ? ['username', 'password'] : ['registerUsername', 'registerPhoneNumber', 'registerUserMail', 'registerPassword', 'registerPasswordconfirm']
@@ -529,9 +622,11 @@
                 'registerPhoneNumber': '',
                 'registerUsername': ''
               })
+            })
+            .catch((result)=>{
+              this.registerLoading=false;
             });
 
-            this.registerLoading = false
           }
         });
       },
@@ -545,7 +640,7 @@
           this.issend = false;
           const data = this.form.getFieldValue('registerUserMail');
           console.log(data);
-          // this.sendMail(data);
+          this.sendMail(data);
 
           this.timer = setInterval(() => {
             if (this.count > 0 && this.count <= TIME_COUNT) {
@@ -559,8 +654,8 @@
         }
       },
       sendLogincode() {
-        console.log(this.form.getFieldValue('username'));
-        if (this.form.getFieldValue('username').length === 0) {
+        console.log(this.form.getFieldValue('username'))
+        if (this.form.getFieldValue('username').length == 0) {
           this.issendLogin = true;
         }
         const TIME_COUNT = 60;
@@ -570,6 +665,7 @@
           const data = this.form.getFieldValue('username');
           console.log(data);
           this.sendMail(data);
+
           this.timer = setInterval(() => {
             if (this.countLogin > 0 && this.countLogin <= TIME_COUNT) {
               this.countLogin--;
@@ -582,7 +678,7 @@
         }
       },
       handleCodeLogin() {
-        this.isCodeLogin = !this.isCodeLogin;
+          this.isCodeLogin=!this.isCodeLogin;
       },
       handleForgetPassword() {
         this.isToRetrieve = true;
@@ -606,6 +702,18 @@
       finishRetrieve() {
         this.isToRetrieve = false;
         this.retrieveStep = 0;
+      },
+      handleDynamicCode(){
+        if(this.code.length>0){
+          this.NoneVarifyCode=false;
+          this.isWrongDynamicCode=false;
+        }
+        // if(this.code.length>4){
+        //   this.code=this.code.substr(0,4)
+        // }
+      },
+      handleEmailCodeLength(){
+
       }
     }
   }
