@@ -75,7 +75,6 @@ public class AccountController {
     @PostMapping("/checkoutVarifyCode")
     public ResponseVO checkoutVarifyCode(@RequestBody UserForm userForm){
         System.out.println(userForm.getEmail());
-        System.out.println(userForm.getLoginVarifyCode());
         return accountService.checkoutVarifyCode(userForm);
     }
 
