@@ -644,6 +644,7 @@
       // 找回密码下一步
       nextStep() {
         console.log('next step', this.retrieveStep);
+        var _this = this;
         if (this.retrieveStep === 0) {
           this.retrieveEmail = this.form.getFieldValue('retrieveEmail');
           //todo 判断邮箱验证码是否正确
@@ -653,27 +654,34 @@
           };
           console.log(data);
           checkoutVarifyCodeAPI(data).then(function (response) {
-            if (response.success) {
-              this.retrieveStep = 1;
+            if (response) {
+              _this.retrieveStep = 1;
             } else {
               message.error('邮箱验证码错误');
             }
           });
         } else if (this.retrieveStep === 1) {
           //todo 判断密码是否合法
-          const data = {
-            email: this.retrieveEmail,
-            password: this.form.getFieldValue('retrievePasswordconfirm')
-          };
-          console.log(data);
-          changePasswdAPI(data).then(function (response) {
-            if (response.success) {
-              this.retrieveStep = 2;
-            } else {
-              message.error('重置密码失败')
-            }
-          });
-          this.retrieveStep = 2;
+          var oldPwd = this.form.getFieldValue('retrievePassword');
+          var newPwd = this.form.getFieldValue('retrievePasswordconfirm');
+          if (oldPwd.length < 6 || oldPwd.length > 18) {
+            message.error('密码长度应为6到18位')
+          } else if (oldPwd !== newPwd) {
+            message.error('两次密码不一致');
+          } else {
+            const data = {
+              email: this.retrieveEmail,
+              password: this.form.getFieldValue('retrievePasswordconfirm')
+            };
+            console.log(data);
+            changePasswdAPI(data).then(function (response) {
+              if (response) {
+                _this.retrieveStep = 2;
+              } else {
+                message.error('重置密码失败')
+              }
+            });
+          }
         }
       },
       // 找回密码完成
