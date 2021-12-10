@@ -5,14 +5,14 @@
         <h1>
           {{ currentHotelInfo.title }}
         </h1>
-        <div class="hotel-info">
+        <div class="hotel-info" style="display: inline-block">
           <a-card style="width: 240px">
-            <img
-                    alt="example"
-                    src="@/assets/cover.jpeg"
-                    slot="cover"
-                    referrerPolicy="no-referrer"
-            />
+          <img
+                  alt="example"
+                  src="@/assets/cover.jpeg"
+                  slot="cover"
+                  referrerPolicy="no-referrer"
+          />
           </a-card>
           <div class="info">
             <div class="items" v-if="currentHotelInfo.name">
@@ -37,13 +37,13 @@
               <span class="value">{{ currentHotelInfo.description }}</span>
             </div>
           </div>
-
-          <baidu-map class="map" :center="{lng: 118.79228, lat: 32.0393}" :zoom="20"
-                     style="height: 400px; width: 600px">
-            <bm-marker :position="{lng: 118.79228, lat: 32.0393}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
-          </baidu-map>
-
         </div>
+
+        <baidu-map class="map" :center="{lng: 118.97024, lat: 32.12009}" :zoom="20"
+                   style="height: 350px; width: 600px; display: inline-block">
+          <bm-marker :position="{lng: 118.97024, lat: 32.12009}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+        </baidu-map>
+
         <a-divider></a-divider>
         <a-tabs>
           <a-tab-pane tab="房间信息" key="1">
@@ -122,7 +122,7 @@
 
       .items {
         display: flex;
-        align-items: center;
+        /*align-items: center;*/
         margin-bottom: 10px;
 
         .label {

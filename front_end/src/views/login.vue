@@ -86,7 +86,7 @@
                 <a-icon slot="prefix" type="book" :style="{ color: 'rgba(0,0,0,.25)' }"/>
               </a-input>
               <div>
-                <a-button size="large"  @click="sendLogincode" type="primary" v-if="issendLogin">获取验证码</a-button>
+                <a-button size="large" @click="sendLogincode" type="primary" v-if="issendLogin">获取验证码</a-button>
                 <a-button size="large" v-if="!issendLogin" disabled type="primary">{{ countLogin }}s后重新获取</a-button>
               </div>
             </div>
@@ -349,11 +349,11 @@
         NoneVarifyCode: false,
         isWrongDynamicCode: false,
         retrieveEmail: '',
-        differntRetrievePasswd:true,
-        pageTimers:{},//计时器数组
-        resgisterTimer:0,//注册的计时器
-        loginWithCodeTimer:1,//登录的计时器
-        forgetPasswdTimer:2,//找回密码的计时器
+        differntRetrievePasswd: true,
+        pageTimers: {},//计时器数组
+        resgisterTimer: 0,//注册的计时器
+        loginWithCodeTimer: 1,//登录的计时器
+        forgetPasswdTimer: 2,//找回密码的计时器
       }
     },
     computed: {
@@ -523,10 +523,10 @@
           callback(new Error('请输入密码'))
         }
         if (value && retrievePassword && value.trim() !== retrievePassword.trim()) {
-          this.differntRetrievePasswd=true;
+          this.differntRetrievePasswd = true;
           callback(new Error('两次密码不一致'))
         }
-        if(value.length>=6 && retrievePassword.length>=6 && value.trim() == retrievePassword.trim()) {
+        if (value.length >= 6 && retrievePassword.length >= 6 && value.trim() == retrievePassword.trim()) {
           this.differntRetrievePasswd = false;
           callback()
         }
@@ -699,7 +699,7 @@
       // 找回密码下一步
       nextStep() {
         console.log('next step', this.retrieveStep);
-        var _this=this
+        var _this = this
         if (_this.retrieveStep === 0) {
           this.retrieveEmail = this.form.getFieldValue('retrieveEmail');
           //todo 判断邮箱验证码是否正确
@@ -717,7 +717,7 @@
         } else if (_this.retrieveStep === 1) {
           //todo 判断密码是否合法
           console.log(this.differntRetrievePasswd)
-          if(this.differntRetrievePasswd){
+          if (this.differntRetrievePasswd) {
             return;
           }
           const data = {
