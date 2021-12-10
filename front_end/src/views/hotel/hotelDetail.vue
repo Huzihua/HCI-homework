@@ -2,19 +2,20 @@
   <a-layout>
     <a-layout-content>
       <div class="hotelDetailCard">
-        <h1>
-          {{ currentHotelInfo.title }}
-        </h1>
-        <div class="hotel-info" style="display: inline-block">
-          <a-card style="width: 240px">
-          <img
-                  alt="example"
-                  src="@/assets/cover.jpeg"
-                  slot="cover"
-                  referrerPolicy="no-referrer"
-          />
-          </a-card>
-          <div class="info">
+<!--        <h1>-->
+<!--          {{ currentHotelInfo.title }}-->
+<!--        </h1>-->
+<!--        <div class="hotel-info" style="display: inline-block">-->
+<!--          <a-card style="width: 240px">-->
+<!--          <img-->
+<!--                  alt="example"-->
+<!--                  src="@/assets/cover.jpeg"-->
+<!--                  slot="cover"-->
+<!--                  referrerPolicy="no-referrer"-->
+<!--          />-->
+<!--          </a-card>-->
+<!--          <div class="info">-->
+        <div style="display: inline-block">
             <div class="items" v-if="currentHotelInfo.name">
               <span class="label">酒店名称：</span>
               <span class="value">{{ currentHotelInfo.name }}</span>
@@ -36,20 +37,23 @@
               <span class="label">酒店简介:</span>
               <span class="value">{{ currentHotelInfo.description }}</span>
             </div>
-          </div>
         </div>
+<!--          </div>-->
+<!--        </div>-->
 
-        <baidu-map class="map" :center="{lng: 118.97024, lat: 32.12009}" :zoom="20"
-                   style="height: 350px; width: 600px; display: inline-block">
-          <bm-marker :position="{lng: 118.97024, lat: 32.12009}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+        <baidu-map id="map" :center="{lng: hotelLongitude, lat: hotelLatitude}" :zoom="20"
+                   style="height: 350px; width: 600px; display: inline-block; float: right">
+          <bm-marker :position="{lng: hotelLongitude, lat: hotelLatitude}" animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
         </baidu-map>
+<!--        <div id="map" style="height: 350px; width: 600px; display: inline-block; float: right"></div>-->
 
         <a-divider></a-divider>
+
         <a-tabs>
           <a-tab-pane tab="房间信息" key="1">
             <RoomList :rooms="currentHotelInfo.rooms"></RoomList>
           </a-tab-pane>
-          <a-tab-pane tab="酒店详情" key="2">
+          <a-tab-pane tab="用户评价" key="2">
 
             <CommentList :comments="commentList">></CommentList>  <!--新增-->
 
@@ -73,6 +77,8 @@
     data() {
       return {
         starDic: ['One', 'Two', 'Three', 'Four', 'Five'],
+        hotelLongitude: 118.97024,  // 酒店经度
+        hotelLatitude: 32.12009,    // 酒店纬度
       }
     },
     computed: {
@@ -85,6 +91,7 @@
       this.set_currentHotelId(Number(this.$route.params.hotelId));
       this.getHotelById();
       this.getHotelComments();//新增
+      this.getHotelCoordinate()
     },
     beforeRouteUpdate(to, from, next) {
       this.set_currentHotelId(Number(to.params.hotelId));
@@ -100,7 +107,15 @@
       ...mapActions([
         'getHotelById',
         "getHotelComments",//新增
-      ])
+      ]),
+
+      // 根据酒店地址获取经纬度
+      getHotelCoordinate() {
+        console.log(this.currentHotelInfo.id);
+        const hotelCoordinates = [
+
+        ]
+      }
     }
   }
 </script>
