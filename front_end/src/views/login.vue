@@ -702,7 +702,7 @@
         var _this = this
         if (_this.retrieveStep === 0) {
           this.retrieveEmail = this.form.getFieldValue('retrieveEmail');
-          //todo 判断邮箱验证码是否正确
+          // 判断邮箱验证码是否正确
           const data = {
             email: this.retrieveEmail,
             loginVarifyCode: this.form.getFieldValue('retrieveCode')
@@ -715,7 +715,7 @@
             }
           });
         } else if (_this.retrieveStep === 1) {
-          //todo 判断密码是否合法
+          // 判断密码是否合法
           console.log(this.differntRetrievePasswd)
           if (this.differntRetrievePasswd) {
             return;

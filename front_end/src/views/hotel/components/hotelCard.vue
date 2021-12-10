@@ -11,7 +11,7 @@
         <br><br>
         <!--星级-->
         <span class="hotel_content" style="float: left; font-weight: bold">
-        星级：<a-rate style="font-size: 15px; margin-left: 3px" :value="starDic.indexOf(hotel.hotelStar) + 1"/>
+        星级：<a-rate style="font-size: 15px; margin-left: 3px" :value="starDic.indexOf(hotel.hotelStar) + 1" disabled/>
         </span>
         <!--评分-->
         <span class="score hotel_content">{{hotel.rate.toFixed(1)}}</span>
