@@ -15,7 +15,7 @@
                     <a-form-item label="邮箱" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">
                         <a-input
                                 placeholder="请填写邮箱号"
-                                v-decorator="['email', { rules: [{ required: true, message: '请输入邮箱号' },,{ validator: this.handleEmail }] }]"
+                                v-decorator="['email', { rules: [{ required: true, message: '请输入邮箱号' },,{ }] }]"
                                 v-if="modify"
                         />
                         <span v-else>{{ userInfo.email}}</span>
@@ -55,7 +55,7 @@
                     <a-form-item label="手机号" :label-col="{ span: 3 }" :wrapper-col="{ span: 5, offset: 1 }">
                         <a-input
                                 placeholder="请填写手机号"
-                                v-decorator="['phoneNumber', { rules: [{ required: true, message: '请输入手机号' },{ validator: this.handlePhoneNumber }] }]"
+                                v-decorator="['phoneNumber', { rules: [{ required: false, message: '请输入手机号' },{ r }] }]"
                                 v-if="modify"
                         />
                         <span v-else>{{ userInfo.phoneNumber}}</span>
@@ -176,6 +176,7 @@
     import {mapGetters, mapMutations, mapActions} from 'vuex'
 
     import orderDetail from "../order/components/orderDetail"
+    import {message} from "ant-design-vue";
     const columns = [
         {
             title: '订单号',
@@ -314,12 +315,33 @@
                 this.form.validateFields((err, values) => {
                     if (!err) {
                         var birthDate=this.form.getFieldValue('birth_date');
+                        var phone=this.form.getFieldValue('phoneNumber');
+                        var mail=this.form.getFieldValue('email')
+                      console.log(mail)
+                      const regex=/^1[0-9]{10}$/
+                      if(phone!=='未填写') {
+                        if (regex.test(phone)) {
+                          if (phone.length !== 11) {
+                            message.error('请输入正确的手机号码')
+                            return;
+                          }
+                        } else {
+                          message.error('请输入正确的手机号码')
+                          return;
+                        }
+                      }
+                      const regexMail = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/
+                      if (regexMail.test(mail)) {
+
+                      } else {
+                        message.error('请输入有效邮箱')
+                        return;
+                      }
                       if(birthDate==null){
                           birthDate=this.userInfo.birth_date;
                         }else {
                         birthDate=this.form.getFieldValue('birth_date').format('YYYY-MM-DD');
                       }
-                      console.log(birthDate)
                         const data = {
                             userName: this.form.getFieldValue('userName'),
                             birth_date:birthDate,
