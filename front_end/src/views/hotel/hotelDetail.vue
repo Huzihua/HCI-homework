@@ -38,7 +38,7 @@
         <!--            </div>-->
         <!--          </div>-->
         <!--        </div>-->
-        <div style="; margin-bottom: 10px">
+        <div style="max-width: 570px; margin-bottom: 10px">
           <span style="font-weight: bold; font-size: 20px">{{ currentHotelInfo.name }}</span>
           <span class="hotelScore">{{ currentHotelInfo.rate.toFixed(1) }}</span>
           <br>
@@ -50,16 +50,13 @@
           <div class="hotelInfo">
             <a-icon type="environment" theme="twoTone" style="margin-right: 15px; font-size: large"/>
             <span>{{ currentHotelInfo.address }}</span>
+            <a-button type="link" style="" @click="changeCheckPath">去这里</a-button>
           </div>
           <div class="hotelInfo">
             <a-icon type="info-circle" theme="twoTone" style="margin-right: 15px; font-size: large"/>
             <span>{{ currentHotelInfo.description }}</span>
-            <a-button type="link" style="float: right" @click="changeCheckPath">如何到达</a-button>
-
           </div>
         </div>
-        <!--          </div>-->
-        <!--        </div>-->
 
         <baidu-map id="map" :center="{lng: getHotelCoordinate()[0], lat: getHotelCoordinate()[1]}" :zoom="20"
                    style="height: 350px; width: 570px; display: inline-block; float: right; border: solid #9b9b9b 1px;
@@ -99,9 +96,7 @@
             <RoomList :rooms="currentHotelInfo.rooms"></RoomList>
           </a-tab-pane>
           <a-tab-pane tab="用户评价" key="2">
-
             <CommentList :comments="commentList">></CommentList>  <!--新增-->
-
           </a-tab-pane>
         </a-tabs>
       </div>
