@@ -6,7 +6,7 @@
 
           <div class="search-box">
             <div class="search-box-header">目的地</div>
-            <div class="search-box-content"><a-cascader :options="Dests"  v-model="dest" style="width: 100%" ></a-cascader></div>
+            <div class="search-box-content"><a-cascader placeholder="请选择" :options="Dests"  v-model="dest" style="width: 100%" ></a-cascader></div>
           </div>
           <div class="search-box">
             <div class="search-box-header">入住时间</div>
@@ -14,7 +14,7 @@
           </div>
           <div class="search-box">
             <div class="search-box-header">星级</div>
-            <div class="search-box-content"><a-cascader v-model="hotelStar" :options="Stars" style="width: 100%" ></a-cascader></div>
+            <div class="search-box-content"><a-cascader placeholder="请选择" v-model="hotelStar" :options="Stars" style="width: 100%" ></a-cascader></div>
           </div>
           <div class="search-box">
             <div class="search-box-header">关键词(选填)</div>
@@ -88,7 +88,7 @@
   {
     name: '西单',
     key: 'XiDan',
-  }]
+  }];
 
   const starList = [
   {
