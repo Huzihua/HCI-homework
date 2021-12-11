@@ -76,12 +76,12 @@
 <!--                                v-decorator="['password', { rules: [{ required: false, message: '请输入新密码' }] }]"-->
 <!--                        />-->
 <!--                    </a-form-item>-->
-                    <a-form-item :wrapper-col="{ span: 12, offset: 5 }" v-if="modify">
-                        <a-button type="primary" @click="saveModify">
-                            保存
-                        </a-button>
-                        <a-button type="default" style="margin-left: 30px" @click="cancelModify">
+                    <a-form-item :wrapper-col="{ span: 12, offset: 4 }" v-if="modify">
+                        <a-button type="default" style="float: left" @click="cancelModify">
                             取消
+                        </a-button>
+                        <a-button  type="primary" style="margin-left: 120px" @click="saveModify">
+                            保存
                         </a-button>
                     </a-form-item>
                     <a-form-item :wrapper-col="{ span: 8, offset: 4 }" v-else>
@@ -458,7 +458,7 @@
 <style lang="less">
     .info-wrapper {
         .ant-tabs-bar {
-            padding-left: 30px
+            padding-left: 55px
         }
     }
 </style>
