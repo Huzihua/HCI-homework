@@ -302,7 +302,7 @@
 .list-search-container {
   position: sticky;
   top: 0px;
-  width: 100%;
+  width: 98%;
   margin-top: 30px;
   background: #fff;
   box-shadow: 0 8px 20px 0 rgb(97 121 157 / 16%);
@@ -311,7 +311,8 @@
   z-index:100;
 }
 .inner-wrap{
-  margin-left: 5%;
+  margin-top: 15px;
+  margin-left: 4%;
 }
 
 .search-container{

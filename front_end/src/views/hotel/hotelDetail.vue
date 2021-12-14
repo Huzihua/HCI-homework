@@ -106,7 +106,7 @@
 <script>
 import {mapGetters, mapActions, mapMutations} from 'vuex'
 import RoomList from './components/roomList'
-import CommentList from './components/commentList'
+import CommentList from './components/commentCard'
 
 export default {
   name: 'hotelDetail',
