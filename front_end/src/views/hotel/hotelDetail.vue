@@ -57,7 +57,26 @@
             <span>{{ currentHotelInfo.description }}</span>
           </div>
         </div>
-
+        <a-carousel arrows autoplay effect="fade" style="height: 350px; width: 570px; display: inline-block; float: left;
+        margin-bottom: 2px">
+          <div
+              slot="prevArrow"
+              class="custom-slick-arrow"
+              style="left: 10px;z-index: 1"
+          >
+            <a-icon type="left-circle" />
+          </div>
+          <div
+              slot="nextArrow"
+              class="custom-slick-arrow"
+              style="right: 10px">
+            <a-icon type="right-circle" />
+          </div>
+          <div style="height: 140px"><img src="../../assets/example3.png"/></div>
+          <div style="height: 140px"><img src="../../assets/example1.png"/></div>
+          <div style="height: 140px"><img src="../../assets/example4.png"/></div>
+          <div style="height: 140px"><img src="../../assets/example2.png"/></div>
+        </a-carousel>
         <baidu-map id="map" :center="{lng: getHotelCoordinate()[0], lat: getHotelCoordinate()[1]}" :zoom="20"
                    style="height: 350px; width: 570px; display: inline-block; float: right; border: solid #9b9b9b 1px;
                           margin-bottom: 2px">
@@ -226,5 +245,39 @@ export default {
       }
     }
   }
+}
+</style>
+
+<style scoped>
+.ant-carousel >>> .slick-slide{
+  text-align: center;
+  height: 320px;
+  line-height: 350px;
+  overflow: hidden;
+}
+
+.ant-carousel >>> .custom-slick-arrow {
+  width: 25px;
+  height: 25px;
+  font-size: 25px;
+  color: #364d79;
+  opacity: 0.3;
+}
+.ant-carousel >>> .custom-slick-arrow:before {
+  display: none;
+}
+.ant-carousel >>> .custom-slick-arrow:hover {
+  opacity: 0.5;
+}
+
+.ant-carousel >>> .slick-slide h3 {
+  color: #fff;
+}
+
+.ant-carousel >>> .slick-slide img {
+  border: 5px solid #fff;
+  display: block;
+  margin: auto;
+  max-width: 85%;
 }
 </style>
