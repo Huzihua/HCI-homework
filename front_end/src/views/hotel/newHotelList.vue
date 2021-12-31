@@ -253,10 +253,12 @@
   console.log(this.dest);
   this.search = true;
   let hotels = [];
+  console.log(this.hotelStar);
     hotels = this.hotelList.filter((h) =>
-        (h.bizRegion === this.bizRegion || this.bizRegion === 'All') &&
-        this.starFilters.indexOf(h.hotelStar) !== -1);
-  // console.log(hotels);
+        (this.hotelStar[0]==="All"|| this.hotelStar[0]===h.hotelStar||(this.hotelStar[0]==="ThreeAndBelow" && h.hotelStar==="Three")) &&(
+            this.importantKey.length===0||
+        h.name.indexOf(this.importantKey) !== -1 ));
+  console.log(hotels);
   this.resultHotel = hotels;
   // console.log(this.starFilters);
   return hotels;
@@ -271,7 +273,8 @@
   console.log(e);
   let order = e.key;
   this.resultHotel.sort((h1, h2) => {
-  if (order === ["grade"]){
+  if (order === "grade"){
+    console.log(h1.rate);
   return h2.rate - h1.rate;
 }
   // else if (order === ['price']){
