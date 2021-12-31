@@ -1,6 +1,14 @@
+
 <template>
   <a-card hoverable class="hotelCard ant-col-xs-7 ant-col-lg-5 ant-col-xxl-3">
-    <img alt="example" src="@/assets/cover.jpeg" referrerPolicy="no-referrer"/>
+    <img alt="example" v-if="hotel.id===1" src="@/assets/cover1.jpg" referrerPolicy="no-referrer"/>
+    <img alt="example" v-else-if="hotel.id===2" src="@/assets/cover2.jpg" referrerPolicy="no-referrer"/>
+    <img alt="example" v-if="hotel.id===3" src="@/assets/cover3.jpg" referrerPolicy="no-referrer"/>
+    <img alt="example" v-if="hotel.id===8" src="@/assets/cover4.jpg" referrerPolicy="no-referrer"/>
+    <img alt="example" v-if="hotel.id===5" src="@/assets/cover5.jpg" referrerPolicy="no-referrer"/>
+    <img alt="example" v-if="hotel.id===6" src="@/assets/cover6.jpg" referrerPolicy="no-referrer"/>
+    <img alt="example" v-if="hotel.id===7" src="@/assets/cover7.jpg" referrerPolicy="no-referrer"/>
+
     <a-card-meta>
       <template slot="description">
         <!--酒店名-->
@@ -54,6 +62,10 @@
         starDic: ['One', 'Two', 'Three', 'Four', 'Five'],
         roomTypes: [],
         floorPrice: 99999,
+        pic: '',
+        allPics: {
+
+        }
       }
     },
     computed: {
