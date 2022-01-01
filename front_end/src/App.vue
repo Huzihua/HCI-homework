@@ -19,8 +19,8 @@ export default {
       zh_CN,
     };
   },
-  components: {
-    
+  components: {},
+  methods: {
   }
 }
 </script>

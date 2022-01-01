@@ -52,7 +52,6 @@
           <a-layout-content style="min-width: 800px">
             <a-spin :spinning="hotelListLoading">
               <div class="card-wrapper">
-
                 <div v-if="search">
                   <HotelCard :hotel="item" v-for="item in resultHotel" :key="item.index"
                              @click.native="jumpToDetails(item.id)"></HotelCard>
