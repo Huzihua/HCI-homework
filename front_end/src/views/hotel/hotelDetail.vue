@@ -38,7 +38,9 @@
         <!--            </div>-->
         <!--          </div>-->
         <!--        </div>-->
-        <div style="max-width: 570px; margin-bottom: 10px">
+
+        <!--        酒店基本信息div   -->
+        <div style="max-width: 570px; margin-bottom: 10px; display: inline-block; float: left">
           <span style="font-weight: bold; font-size: 20px">{{ currentHotelInfo.name }}</span>
           <span class="hotelScore">{{ currentHotelInfo.rate.toFixed(1) }}</span>
           <br>
@@ -57,8 +59,18 @@
             <span>{{ currentHotelInfo.description }}</span>
           </div>
         </div>
-        <a-carousel arrows autoplay effect="fade" style="height: 350px; width: 570px; display: inline-block; float: left;
-        margin-bottom: 2px">
+
+        <!--        酒店地图（页面右侧）      -->
+        <baidu-map id="map" :center="{lng: getHotelCoordinate()[0], lat: getHotelCoordinate()[1]}" :zoom="20"
+                   style="height: 470px; width: 570px; display: inline-block; float: right; border: solid #9b9b9b 1px;
+                          margin-bottom: 2px;">
+          <bm-marker :position="{lng: getHotelCoordinate()[0], lat: getHotelCoordinate()[1]}"
+                     animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
+          <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
+        </baidu-map>
+
+        <!--        酒店图片    -->
+        <a-carousel arrows autoplay effect="fade" style="height: 350px; width: 570px; float: left; margin-bottom: 2px">
           <div
               slot="prevArrow"
               class="custom-slick-arrow"
@@ -77,13 +89,7 @@
           <div style="height: 140px"><img src="../../assets/example4.png"/></div>
           <div style="height: 140px"><img src="../../assets/example2.png"/></div>
         </a-carousel>
-        <baidu-map id="map" :center="{lng: getHotelCoordinate()[0], lat: getHotelCoordinate()[1]}" :zoom="20"
-                   style="height: 350px; width: 570px; display: inline-block; float: right; border: solid #9b9b9b 1px;
-                          margin-bottom: 2px">
-          <bm-marker :position="{lng: getHotelCoordinate()[0], lat: getHotelCoordinate()[1]}"
-                     animation="BMAP_ANIMATION_BOUNCE"></bm-marker>
-          <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
-        </baidu-map>
+
 
         <a-modal :body-style="bodystyle"
                  :visible="this.pathCheckModalVisable"
