@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="label" >
-      <img src="@/assets/logo.svg" class="logo" alt="logo" @click="jumpToHome">
+      <img style="height: 60px" src="@/assets/logo.svg" class="logo" alt="logo" @click="jumpToHome">
       <a-button class="title"  type="link" @click="jumpToHome">住哪儿</a-button>
     </div>
     <a-menu v-model="current" mode="horizontal" theme="light">
