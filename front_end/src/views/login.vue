@@ -4,7 +4,7 @@
       <div class="header">
         <div>
           <!-- <img src="@/assets/logo.svg" class="logo" alt="logo"> -->
-          <span class="title">NJU酒店管理系统</span>
+          <span class="title">住哪儿</span>
         </div>
       </div>
       <div class="desc">

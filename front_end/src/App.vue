@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-title data-title="NJUSE酒店管理系统">
+  <div id="app" v-title data-title="住哪儿">
     <a-locale-provider :locale="zh_CN">
     <transition name="fade-transform" mode="out-in">
       <router-view/>

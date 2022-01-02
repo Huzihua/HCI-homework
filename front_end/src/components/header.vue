@@ -2,7 +2,7 @@
   <div class="header">
     <div class="label" >
       <img src="@/assets/logo.svg" class="logo" alt="logo" @click="jumpToHome">
-      <a-button class="title"  type="link" @click="jumpToHome">NJUSE 酒店管理系统</a-button>
+      <a-button class="title"  type="link" @click="jumpToHome">住哪儿</a-button>
     </div>
     <a-menu v-model="current" mode="horizontal" theme="light">
 
